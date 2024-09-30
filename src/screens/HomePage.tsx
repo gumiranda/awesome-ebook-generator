@@ -136,6 +136,19 @@ export function HomePage() {
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleCopyContent = () => {
+    if (bookContent) {
+      navigator.clipboard.writeText(bookContent).then(
+        () => {
+          alert("Conteúdo copiado para a área de transferência!");
+        },
+        () => {
+          alert("Falha ao copiar o conteúdo. Tente novamente.");
+        },
+      );
+    }
+  };
+
   return (
     <div className="container">
       <h1>Generate Your Ebook</h1>
@@ -196,6 +209,9 @@ export function HomePage() {
         <div className="book-content">
           <h2>Your Generated Book:</h2>
           <pre>{bookContent}</pre>
+          <button onClick={handleCopyContent} className="copy-button">
+            Copy Content
+          </button>
         </div>
       )}
 
@@ -262,17 +278,30 @@ export function HomePage() {
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
           font-size: 1rem;
           color: #333;
-          white-space: pre-wrap; /* Mantém as quebras de linha */
-          word-wrap: break-word; /* Quebra palavras longas */
-          max-width: 100%; /* Limita a largura máxima ao tamanho do container */
-          overflow-wrap: break-word; /* Para garantir que longas palavras sejam quebradas */
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          max-width: 100%;
+          overflow-wrap: break-word;
         }
         pre {
           font-family: monospace;
           font-size: 0.9rem;
           line-height: 1.5;
           color: #333;
-          white-space: break-spaces; /* Mantém as quebras de linha */
+          white-space: break-spaces;
+        }
+        .copy-button {
+          margin-top: 1rem;
+          padding: 0.7rem 1.5rem;
+          background-color: #0070f3;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 1rem;
+        }
+        .copy-button:hover {
+          background-color: #005bb5;
         }
       `}</style>
     </div>
