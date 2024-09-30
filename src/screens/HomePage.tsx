@@ -92,6 +92,7 @@ export function HomePage() {
         ...formValues,
         chapter: chapterNumber,
         section: sectionNumber,
+        previousSection: sectionNumber - 1,
       }),
     });
 
@@ -99,13 +100,19 @@ export function HomePage() {
     return data.sectionContent;
   };
 
-  const reviewText = async (text: string) => {
+  const reviewText = async ({ currentChapter, currentSection, text }: any) => {
     const response = await fetch("/api/reviewText", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({
+        ...formValues,
+        text,
+        currentChapter,
+        currentSection,
+        previousSection: currentSection - 1,
+      }),
     });
 
     const data = await response.json();
@@ -160,7 +167,11 @@ export function HomePage() {
       if (currentChapter <= Number(formValues.chapters)) {
         if (currentSection <= Number(formValues.totalSections)) {
           const text = bookContentJson[currentChapter][currentSection];
-          const sectionContent = await reviewText(text);
+          const sectionContent = await reviewText({
+            currentChapter,
+            currentSection,
+            text,
+          });
           setRevisedContent((prev) => prev + `\n\n${sectionContent}`);
 
           setProgress2((prev) => ({
