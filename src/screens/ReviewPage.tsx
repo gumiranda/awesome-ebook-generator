@@ -37,9 +37,8 @@ export function ReviewPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        promptRewrite: `This is the ${
-          chunkIndex + 1
-        } part of my text. Rewrite the following text to improve its readability and coherence:\n\n${text}`,
+        promptRewrite: `This is the ${chunkIndex} part of my text.  Rewrite the following text to improve its readability and coherence:\n\n${text}\n Ensure the new text part flows naturally from the previous content, providing a smooth transition. 
+    The section should hint at future developments to maintain reader engagement.`,
       }),
     });
 
@@ -59,6 +58,9 @@ export function ReviewPage() {
 
       setRevisedContent((prev) => prev + `\n\n${sectionContent}`);
       setProgress((prev) => prev + 1);
+      if (progress === textChunks.length - 1) {
+        setLoading(false);
+      }
     };
 
     processText();
@@ -85,14 +87,25 @@ export function ReviewPage() {
     const { name, value } = e.target;
     setFormValues((prev) => ({ ...prev, [name]: value }));
   };
-
+  const handleCopyContentOriginal = () => {
+    if (revisedContent) {
+      navigator.clipboard.writeText(revisedContent).then(
+        () => {
+          alert("Conteúdo original copiado para a área de transferência!");
+        },
+        () => {
+          alert("Falha ao copiar o conteúdo original. Tente novamente.");
+        },
+      );
+    }
+  };
   return (
     <div className="container">
-      <h1>Generate and Review Your Ebook</h1>
+      <h1>Rewrite Your Ebook</h1>
       <form onSubmit={handleSubmit} className="form">
         {/* Full text field */}
         <div className="input-container">
-          <label>Full Text</label>
+          <label>Text</label>
           <textarea
             name="fullText"
             value={formValues.fullText}
@@ -105,7 +118,7 @@ export function ReviewPage() {
         <button type="submit" disabled={loading} className="submit-button">
           {loading
             ? `Processing ${progress}/${textChunks.length}...`
-            : "Generate and Review"}
+            : "Rewrite Text"}
         </button>
       </form>
 
@@ -115,6 +128,12 @@ export function ReviewPage() {
         <div className="revised-content">
           <h2>Revised Book Content:</h2>
           <pre>{revisedContent}</pre>
+          <button
+            onClick={() => handleCopyContentOriginal()}
+            className="copy-button"
+          >
+            Copy Original Content
+          </button>
         </div>
       )}
 
@@ -191,6 +210,21 @@ export function ReviewPage() {
           line-height: 1.5;
           color: #333;
           white-space: break-spaces;
+        }
+        .copy-button,
+        .review-button {
+          margin-top: 1rem;
+          padding: 0.7rem 1.5rem;
+          background-color: #0070f3;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 1rem;
+        }
+        .copy-button:hover,
+        .review-button:hover {
+          background-color: #005bb5;
         }
       `}</style>
     </div>

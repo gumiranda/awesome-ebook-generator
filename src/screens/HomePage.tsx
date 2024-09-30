@@ -325,7 +325,7 @@ export function HomePage() {
         <div className="revised-content">
           <h2>Revised Book Content:</h2>
           <pre>{revisedContent}</pre>
-          <button onClick={handleCopyContent} className="copy-button">
+          <button onClick={() => handleCopyContent()} className="copy-button">
             Copy Revised Content
           </button>
         </div>
