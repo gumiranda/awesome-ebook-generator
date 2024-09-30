@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 // Componente para os inputs do formulário com estilização
-const FormInput = ({
+export const FormInput = ({
   label,
   value,
   onChange,
