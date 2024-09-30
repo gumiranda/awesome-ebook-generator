@@ -147,14 +147,14 @@ export function HomePage() {
       }
     };
 
-    if (loading) {
+    if (loading && ativarReview < 1) {
       generateNextSection();
     }
-  }, [progress, formValues, loading]);
+  }, [progress, formValues, loading, ativarReview]);
   useEffect(() => {
     const generateNextSectionReview = async () => {
       const { currentChapter, currentSection } = progress2;
-      debugger;
+
       if (currentChapter === 0 || loading === false) return;
 
       if (currentChapter <= Number(formValues.chapters)) {
@@ -178,7 +178,7 @@ export function HomePage() {
       }
     };
     console.log(progress2, loading, ativarReview);
-    if (loading && ativarReview > 0) {
+    if (ativarReview > 0 && loading) {
       generateNextSectionReview();
     }
   }, [progress2, formValues, loading, ativarReview]);
