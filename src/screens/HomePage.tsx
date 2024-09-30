@@ -66,6 +66,7 @@ export function HomePage() {
     totalSections: 3,
   });
   const [ativarReview, setAtivarReview] = useState(0);
+  const [custo, setCusto] = useState(0);
   const [bookContent, setBookContent] = useState("");
   const [revisedContent, setRevisedContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -97,6 +98,7 @@ export function HomePage() {
     });
 
     const data = await response.json();
+    setCusto((prev) => prev + data.costInDollars);
     return data.sectionContent;
   };
 
@@ -116,6 +118,8 @@ export function HomePage() {
     });
 
     const data = await response.json();
+    setCusto((prev) => prev + data.costInDollars);
+
     return data.sectionContent;
   };
 
@@ -226,6 +230,18 @@ export function HomePage() {
       );
     }
   };
+  const handleCopyContentOriginal = () => {
+    if (bookContent) {
+      navigator.clipboard.writeText(bookContent).then(
+        () => {
+          alert("Conteúdo original copiado para a área de transferência!");
+        },
+        () => {
+          alert("Falha ao copiar o conteúdo original. Tente novamente.");
+        },
+      );
+    }
+  };
 
   return (
     <div className="container">
@@ -275,6 +291,7 @@ export function HomePage() {
           {loading ? "Generating..." : "Generate Ebook"}
         </button>
       </form>
+      <h1>Custo atual(em dolares): {custo}</h1>
 
       {loading && (
         <p>
@@ -287,9 +304,20 @@ export function HomePage() {
         <div className="book-content">
           <h2>Generated Book:</h2>
           <pre>{bookContent}</pre>
-          <button onClick={() => handleReviewText()} className="review-button">
-            Review and Rewrite Text
-          </button>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <button
+              onClick={() => handleCopyContentOriginal()}
+              className="copy-button"
+            >
+              Copy Original Content
+            </button>
+            <button
+              onClick={() => handleReviewText()}
+              className="review-button"
+            >
+              Review and Rewrite Text
+            </button>
+          </div>
         </div>
       )}
 
