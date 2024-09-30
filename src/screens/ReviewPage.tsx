@@ -1,7 +1,7 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
 
-// Componente para os inputs do formulário com estilização
 export function ReviewPage() {
   const [formValues, setFormValues] = useState({
     title: "",
@@ -9,18 +9,19 @@ export function ReviewPage() {
     description: "",
     chapters: 5,
     totalSections: 3,
-    fullText: "", // Campo para o texto completo
+    fullText: "", // Full text field
   });
-  const [custo, setCusto] = useState(0);
-  const [revisedContent, setRevisedContent] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
 
-  const MAX_CHUNK_SIZE = 14000; // Tamanho máximo do chunk (14.000 caracteres)
-  const [textChunks, setTextChunks] = useState<string[]>([]); // Para armazenar os pedaços de texto
+  const [custo, setCusto] = useState(0); // Cost tracking
+  const [revisedContent, setRevisedContent] = useState(""); // Revised content storage
+  const [loading, setLoading] = useState(false); // Track if the process is ongoing
+  const [progress, setProgress] = useState(0); // Track progress of the review process
 
-  // Função para dividir o texto em pedaços menores de até 14.000 caracteres
-  const divideTextIntoChunks = (text: string, chunkSize: number) => {
+  const MAX_CHUNK_SIZE = 14000; // Max chunk size (14,000 characters)
+  const [textChunks, setTextChunks] = useState<string[]>([]); // To store text chunks
+
+  // Function to divide the text into smaller chunks up to 14,000 characters
+  const divideTextIntoChunks = (text: string, chunkSize: number): string[] => {
     const chunks = [];
     for (let i = 0; i < text.length; i += chunkSize) {
       chunks.push(text.slice(i, i + chunkSize));
@@ -28,6 +29,7 @@ export function ReviewPage() {
     return chunks;
   };
 
+  // Review a chunk of text asynchronously
   const reviewText = async (text: string, chunkIndex: number) => {
     const response = await fetch("/api/reviewSplitText", {
       method: "POST",
@@ -35,7 +37,9 @@ export function ReviewPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        promptRewrite: `This is the ${chunkIndex} part of my text. Rewrite the following text to improve its readability and coherence:\n\n${text}`,
+        promptRewrite: `This is the ${
+          chunkIndex + 1
+        } part of my text. Rewrite the following text to improve its readability and coherence:\n\n${text}`,
       }),
     });
 
@@ -45,11 +49,12 @@ export function ReviewPage() {
     return data.sectionContent;
   };
 
+  // Automatically process chunks when the progress changes
   useEffect(() => {
     const processText = async () => {
       if (!loading || progress >= textChunks.length) return;
 
-      const chunk = textChunks[progress]; // Pega o pedaço atual
+      const chunk = textChunks[progress];
       const sectionContent = await reviewText(chunk, progress);
 
       setRevisedContent((prev) => prev + `\n\n${sectionContent}`);
@@ -59,17 +64,21 @@ export function ReviewPage() {
     processText();
   }, [progress, textChunks, loading]);
 
+  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setRevisedContent(""); // Resetar o conteúdo revisado
-    setLoading(true);
+    if (!formValues.fullText.trim()) return; // Early return if text is empty
 
-    // Dividir o texto em pedaços de até 14.000 caracteres
+    setRevisedContent(""); // Reset the revised content
+    setLoading(true); // Mark as loading
+
+    // Split text into chunks
     const chunks = divideTextIntoChunks(formValues.fullText, MAX_CHUNK_SIZE);
-    setTextChunks(chunks); // Armazena os pedaços
-    setProgress(0); // Inicia o processamento do primeiro pedaço
+    setTextChunks(chunks); // Store chunks
+    setProgress(0); // Reset progress
   };
 
+  // Handle form input changes
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -81,7 +90,7 @@ export function ReviewPage() {
     <div className="container">
       <h1>Generate and Review Your Ebook</h1>
       <form onSubmit={handleSubmit} className="form">
-        {/* Campo para texto completo */}
+        {/* Full text field */}
         <div className="input-container">
           <label>Full Text</label>
           <textarea
@@ -89,15 +98,18 @@ export function ReviewPage() {
             value={formValues.fullText}
             onChange={handleInputChange}
             required
+            disabled={loading}
           />
         </div>
 
         <button type="submit" disabled={loading} className="submit-button">
-          {loading ? "Generating..." : "Generate and Review"}
+          {loading
+            ? `Processing ${progress}/${textChunks.length}...`
+            : "Generate and Review"}
         </button>
       </form>
 
-      <h1>Custo atual (em dólares): {custo}</h1>
+      <h1>Custo atual (em dólares): {custo.toFixed(2)}</h1>
 
       {revisedContent && (
         <div className="revised-content">
@@ -139,9 +151,8 @@ export function ReviewPage() {
           transition: border-color 0.3s ease;
           color: #333;
         }
-        textarea:focus {
-          border-color: #0070f3;
-          outline: none;
+        textarea:disabled {
+          background-color: #eee;
         }
         .submit-button {
           padding: 1rem 2rem;
