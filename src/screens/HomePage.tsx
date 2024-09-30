@@ -52,22 +52,32 @@ const FormInput = ({
     `}</style>
   </div>
 );
-
+type BookContentJson = {
+  [chapter: number]: {
+    [section: number]: string;
+  };
+};
 export function HomePage() {
   const [formValues, setFormValues] = useState({
     title: "",
     genre: "",
     description: "",
     chapters: 5,
-    totalSections: 3, // Limite de seções por capítulo
+    totalSections: 3,
   });
-
+  const [ativarReview, setAtivarReview] = useState(0);
   const [bookContent, setBookContent] = useState("");
+  const [revisedContent, setRevisedContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState({
     currentChapter: 0,
     currentSection: 0,
   });
+  const [progress2, setProgress2] = useState({
+    currentChapter: 1,
+    currentSection: 1,
+  });
+  const [bookContentJson, setBookContentJson] = useState<BookContentJson>({});
 
   const generateSection = async (
     chapterNumber: number,
@@ -89,6 +99,19 @@ export function HomePage() {
     return data.sectionContent;
   };
 
+  const reviewText = async (text: string) => {
+    const response = await fetch("/api/reviewText", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ text }),
+    });
+
+    const data = await response.json();
+    return data.sectionContent;
+  };
+
   useEffect(() => {
     const generateNextSection = async () => {
       const { currentChapter, currentSection } = progress;
@@ -100,6 +123,13 @@ export function HomePage() {
             currentChapter,
             currentSection,
           );
+          setBookContentJson((prev) => ({
+            ...prev,
+            [currentChapter]: {
+              ...(prev[currentChapter] ?? {}),
+              [currentSection]: sectionContent,
+            },
+          }));
           setBookContent((prev) => prev + `\n\n${sectionContent}`);
 
           setProgress((prev) => ({
@@ -121,12 +151,49 @@ export function HomePage() {
       generateNextSection();
     }
   }, [progress, formValues, loading]);
+  useEffect(() => {
+    const generateNextSectionReview = async () => {
+      const { currentChapter, currentSection } = progress2;
+      debugger;
+      if (currentChapter === 0 || loading === false) return;
+
+      if (currentChapter <= Number(formValues.chapters)) {
+        if (currentSection <= Number(formValues.totalSections)) {
+          const text = bookContentJson[currentChapter][currentSection];
+          const sectionContent = await reviewText(text);
+          setRevisedContent((prev) => prev + `\n\n${sectionContent}`);
+
+          setProgress2((prev) => ({
+            ...prev,
+            currentSection: prev.currentSection + 1,
+          }));
+        } else if (currentChapter < Number(formValues.chapters)) {
+          setProgress2((prev) => ({
+            currentChapter: prev.currentChapter + 1,
+            currentSection: 1,
+          }));
+        } else {
+          setLoading(false);
+        }
+      }
+    };
+    console.log(progress2, loading, ativarReview);
+    if (loading && ativarReview > 0) {
+      generateNextSectionReview();
+    }
+  }, [progress2, formValues, loading, ativarReview]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setBookContent(""); // Reset previous book content
-    setLoading(true); // Inicia o loading
-    setProgress({ currentChapter: 1, currentSection: 1 }); // Começa do capítulo 1, seção 1
+    setRevisedContent(""); // Reset revised content
+    setLoading(true);
+    setProgress({ currentChapter: 1, currentSection: 1 }); // Start from chapter 1, section 1
+  };
+
+  const handleReviewText = async () => {
+    setAtivarReview((prev) => prev + 1);
+    setLoading(true);
   };
 
   const handleInputChange = (
@@ -137,13 +204,13 @@ export function HomePage() {
   };
 
   const handleCopyContent = () => {
-    if (bookContent) {
-      navigator.clipboard.writeText(bookContent).then(
+    if (revisedContent) {
+      navigator.clipboard.writeText(revisedContent).then(
         () => {
-          alert("Conteúdo copiado para a área de transferência!");
+          alert("Conteúdo revisado copiado para a área de transferência!");
         },
         () => {
-          alert("Falha ao copiar o conteúdo. Tente novamente.");
+          alert("Falha ao copiar o conteúdo revisado. Tente novamente.");
         },
       );
     }
@@ -151,7 +218,7 @@ export function HomePage() {
 
   return (
     <div className="container">
-      <h1>Generate Your Ebook</h1>
+      <h1>Generate and Review Your Ebook</h1>
       <form onSubmit={handleSubmit} className="form">
         <FormInput
           label="Title"
@@ -207,10 +274,20 @@ export function HomePage() {
 
       {bookContent && (
         <div className="book-content">
-          <h2>Your Generated Book:</h2>
+          <h2>Generated Book:</h2>
           <pre>{bookContent}</pre>
+          <button onClick={() => handleReviewText()} className="review-button">
+            Review and Rewrite Text
+          </button>
+        </div>
+      )}
+
+      {revisedContent && (
+        <div className="revised-content">
+          <h2>Revised Book Content:</h2>
+          <pre>{revisedContent}</pre>
           <button onClick={handleCopyContent} className="copy-button">
-            Copy Content
+            Copy Revised Content
           </button>
         </div>
       )}
@@ -270,7 +347,8 @@ export function HomePage() {
           cursor: not-allowed;
           color: #333;
         }
-        .book-content {
+        .book-content,
+        .revised-content {
           margin-top: 2rem;
           padding: 1.5rem;
           background-color: #fff;
@@ -290,7 +368,8 @@ export function HomePage() {
           color: #333;
           white-space: break-spaces;
         }
-        .copy-button {
+        .copy-button,
+        .review-button {
           margin-top: 1rem;
           padding: 0.7rem 1.5rem;
           background-color: #0070f3;
@@ -300,7 +379,8 @@ export function HomePage() {
           cursor: pointer;
           font-size: 1rem;
         }
-        .copy-button:hover {
+        .copy-button:hover,
+        .review-button:hover {
           background-color: #005bb5;
         }
       `}</style>
