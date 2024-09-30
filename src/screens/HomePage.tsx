@@ -1,16 +1,45 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+// Componente para os inputs do formulário
+const FormInput = ({
+  label,
+  value,
+  onChange,
+  type = "text",
+  min,
+  max,
+  name,
+}: any) => (
+  <>
+    <label>{label}</label>
+    <input
+      type={type}
+      value={value}
+      onChange={onChange}
+      required
+      min={min}
+      max={max}
+      name={name}
+    />
+  </>
+);
 
 export function HomePage() {
-  const [title, setTitle] = useState("");
-  const [genre, setGenre] = useState("");
-  const [description, setDescription] = useState("");
-  const [chapters, setChapters] = useState(5);
+  const [formValues, setFormValues] = useState({
+    title: "",
+    genre: "",
+    description: "",
+    chapters: 5,
+    totalSections: 3, // Limite de seções por capítulo
+  });
+
   const [bookContent, setBookContent] = useState("");
   const [loading, setLoading] = useState(false);
-  const [currentChapter, setCurrentChapter] = useState(0);
-  const [currentSection, setCurrentSection] = useState(0);
-  const [totalSections, setTotalSections] = useState(3); // Limite de seções por capítulo
+  const [progress, setProgress] = useState({
+    currentChapter: 0,
+    currentSection: 0,
+  });
 
   // Função para gerar uma seção específica de um capítulo
   const generateSection = async (
@@ -23,9 +52,7 @@ export function HomePage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title,
-        genre,
-        description,
+        ...formValues,
         chapter: chapterNumber,
         section: sectionNumber,
       }),
@@ -35,88 +62,112 @@ export function HomePage() {
     return data.sectionContent;
   };
 
-  // Função que gera todos os capítulos e suas seções
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    setBookContent(""); // Reset previous book content
-    setCurrentChapter(0); // Reset current chapter
-    setCurrentSection(0); // Reset current section
+  // UseEffect para gerar seções e capítulos de forma progressiva
+  useEffect(() => {
+    const generateNextSection = async () => {
+      const { currentChapter, currentSection } = progress;
 
-    for (let chapter = 1; chapter <= chapters; chapter++) {
-      setCurrentChapter(chapter); // Update current chapter progress
+      // Verifica se atingiu o número total de capítulos e seções
+      if (currentChapter === 0 || loading === false) return;
 
-      let chapterContent = ""; // Armazena o conteúdo do capítulo atual
+      if (currentChapter <= Number(formValues.chapters)) {
+        if (currentSection <= Number(formValues.totalSections)) {
+          const sectionContent = await generateSection(
+            currentChapter,
+            currentSection,
+          );
+          setBookContent((prev) => prev + `\n\n${sectionContent}`);
 
-      for (let section = 1; section <= totalSections; section++) {
-        setCurrentSection(section); // Atualiza a seção atual
-        const sectionContent = await generateSection(chapter, section); // Gera uma seção
-        chapterContent += `\n\n${sectionContent}`; // Adiciona o conteúdo da seção ao capítulo
+          // Avança para a próxima seção
+          setProgress((prev) => ({
+            ...prev,
+            currentSection: prev.currentSection + 1,
+          }));
+        } else if (currentChapter < Number(formValues.chapters)) {
+          // Quando terminar as seções do capítulo atual, avança para o próximo capítulo
+          setProgress((prev) => ({
+            currentChapter: prev.currentChapter + 1,
+            currentSection: 1,
+          }));
+        } else {
+          // Fim do processo
+          setLoading(false);
+        }
       }
+    };
 
-      setBookContent((prevContent) => prevContent + `${chapterContent}`);
+    if (loading) {
+      generateNextSection();
     }
+  }, [progress, formValues, loading]);
 
-    setLoading(false);
+  // Dispara a geração ao submeter o formulário
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookContent(""); // Reset previous book content
+    setLoading(true); // Inicia o loading
+    setProgress({ currentChapter: 1, currentSection: 1 }); // Começa do capítulo 1, seção 1
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
   };
 
   return (
     <div>
       <h1>Generate Your Ebook</h1>
       <form onSubmit={handleSubmit}>
-        <label>Title</label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
+        <FormInput
+          label="Title"
+          value={formValues.title}
+          onChange={handleInputChange}
+          name="title"
         />
-
-        <label>Genre</label>
-        <input
-          type="text"
-          value={genre}
-          onChange={(e) => setGenre(e.target.value)}
-          required
+        <FormInput
+          label="Genre"
+          value={formValues.genre}
+          onChange={handleInputChange}
+          name="genre"
         />
-
         <label>Description</label>
         <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          name="description"
+          value={formValues.description}
+          onChange={handleInputChange}
           required
         />
-
-        <label>Number of Chapters</label>
-        <input
+        <FormInput
+          label="Number of Chapters"
           type="number"
-          value={chapters}
-          onChange={(e) => setChapters(Number(e.target.value))}
+          value={formValues.chapters}
+          onChange={handleInputChange}
+          name="chapters"
           min="1"
           max="20"
         />
-
-        <label>Number of Sections per Chapter</label>
-        <input
+        <FormInput
+          label="Number of Sections per Chapter"
           type="number"
-          value={totalSections}
-          onChange={(e) => setTotalSections(Number(e.target.value))}
+          value={formValues.totalSections}
+          onChange={handleInputChange}
+          name="totalSections"
           min="1"
-          max="10" // Limite para evitar muitas seções por capítulo
+          max="10"
         />
 
         <button type="submit" disabled={loading}>
-          Generate Ebook
+          {loading ? "Generating..." : "Generate Ebook"}
         </button>
       </form>
 
       {loading && (
-        <>
-          <p>
-            Generating chapter {currentChapter}, section {currentSection}...
-            please wait.
-          </p>
-        </>
+        <p>
+          Generating chapter {progress.currentChapter}, section{" "}
+          {progress.currentSection}... please wait.
+        </p>
       )}
 
       {bookContent && (
