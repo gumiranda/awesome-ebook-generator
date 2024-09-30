@@ -1,6 +1,5 @@
 "use client";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 
 export function HomePage() {
   const [title, setTitle] = useState("");
@@ -9,14 +8,16 @@ export function HomePage() {
   const [chapters, setChapters] = useState(5);
   const [bookContent, setBookContent] = useState("");
   const [loading, setLoading] = useState(false);
+  const [currentChapter, setCurrentChapter] = useState(0);
+  const [currentSection, setCurrentSection] = useState(0);
+  const [totalSections, setTotalSections] = useState(3); // Limite de seções por capítulo
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    setBookContent(""); // Reset previous book content
-
-    // Send request to backend API to generate book
-    const response = await fetch("/api/generateBook", {
+  // Função para gerar uma seção específica de um capítulo
+  const generateSection = async (
+    chapterNumber: number,
+    sectionNumber: number,
+  ) => {
+    const response = await fetch("/api/generateSection", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,12 +26,37 @@ export function HomePage() {
         title,
         genre,
         description,
-        chapters,
+        chapter: chapterNumber,
+        section: sectionNumber,
       }),
     });
 
     const data = await response.json();
-    setBookContent(data.content);
+    return data.sectionContent;
+  };
+
+  // Função que gera todos os capítulos e suas seções
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    setLoading(true);
+    setBookContent(""); // Reset previous book content
+    setCurrentChapter(0); // Reset current chapter
+    setCurrentSection(0); // Reset current section
+
+    for (let chapter = 1; chapter <= chapters; chapter++) {
+      setCurrentChapter(chapter); // Update current chapter progress
+
+      let chapterContent = ""; // Armazena o conteúdo do capítulo atual
+
+      for (let section = 1; section <= totalSections; section++) {
+        setCurrentSection(section); // Atualiza a seção atual
+        const sectionContent = await generateSection(chapter, section); // Gera uma seção
+        chapterContent += `\n\n${sectionContent}`; // Adiciona o conteúdo da seção ao capítulo
+      }
+
+      setBookContent((prevContent) => prevContent + `${chapterContent}`);
+    }
+
     setLoading(false);
   };
 
@@ -70,12 +96,30 @@ export function HomePage() {
           max="20"
         />
 
-        <button type="submit">Generate Ebook</button>
+        <label>Number of Sections per Chapter</label>
+        <input
+          type="number"
+          value={totalSections}
+          onChange={(e) => setTotalSections(Number(e.target.value))}
+          min="1"
+          max="10" // Limite para evitar muitas seções por capítulo
+        />
+
+        <button type="submit" disabled={loading}>
+          Generate Ebook
+        </button>
       </form>
 
-      {loading && <p>Generating your book... please wait.</p>}
+      {loading && (
+        <>
+          <p>
+            Generating chapter {currentChapter}, section {currentSection}...
+            please wait.
+          </p>
+        </>
+      )}
 
-      {!loading && bookContent && (
+      {bookContent && (
         <>
           <h2>Your Generated Book:</h2>
           <pre>{bookContent}</pre>
