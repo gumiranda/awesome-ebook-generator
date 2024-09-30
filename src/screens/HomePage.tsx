@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-// Componente para os inputs do formulário
+// Componente para os inputs do formulário com estilização
 const FormInput = ({
   label,
   value,
@@ -11,7 +11,7 @@ const FormInput = ({
   max,
   name,
 }: any) => (
-  <>
+  <div className="input-container">
     <label>{label}</label>
     <input
       type={type}
@@ -22,7 +22,35 @@ const FormInput = ({
       max={max}
       name={name}
     />
-  </>
+    <style jsx>{`
+      .input-container {
+        margin-bottom: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        color: #333;
+      }
+      label {
+        font-size: 1.1rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        color: #333;
+      }
+      input {
+        padding: 0.7rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        background-color: #f9f9f9;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease;
+        color: #333;
+      }
+      input:focus {
+        border-color: #0070f3;
+        outline: none;
+      }
+    `}</style>
+  </div>
 );
 
 export function HomePage() {
@@ -41,7 +69,6 @@ export function HomePage() {
     currentSection: 0,
   });
 
-  // Função para gerar uma seção específica de um capítulo
   const generateSection = async (
     chapterNumber: number,
     sectionNumber: number,
@@ -62,12 +89,9 @@ export function HomePage() {
     return data.sectionContent;
   };
 
-  // UseEffect para gerar seções e capítulos de forma progressiva
   useEffect(() => {
     const generateNextSection = async () => {
       const { currentChapter, currentSection } = progress;
-
-      // Verifica se atingiu o número total de capítulos e seções
       if (currentChapter === 0 || loading === false) return;
 
       if (currentChapter <= Number(formValues.chapters)) {
@@ -78,19 +102,16 @@ export function HomePage() {
           );
           setBookContent((prev) => prev + `\n\n${sectionContent}`);
 
-          // Avança para a próxima seção
           setProgress((prev) => ({
             ...prev,
             currentSection: prev.currentSection + 1,
           }));
         } else if (currentChapter < Number(formValues.chapters)) {
-          // Quando terminar as seções do capítulo atual, avança para o próximo capítulo
           setProgress((prev) => ({
             currentChapter: prev.currentChapter + 1,
             currentSection: 1,
           }));
         } else {
-          // Fim do processo
           setLoading(false);
         }
       }
@@ -101,7 +122,6 @@ export function HomePage() {
     }
   }, [progress, formValues, loading]);
 
-  // Dispara a geração ao submeter o formulário
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setBookContent(""); // Reset previous book content
@@ -117,9 +137,9 @@ export function HomePage() {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Generate Your Ebook</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="form">
         <FormInput
           label="Title"
           value={formValues.title}
@@ -132,13 +152,15 @@ export function HomePage() {
           onChange={handleInputChange}
           name="genre"
         />
-        <label>Description</label>
-        <textarea
-          name="description"
-          value={formValues.description}
-          onChange={handleInputChange}
-          required
-        />
+        <div className="input-container">
+          <label>Description</label>
+          <textarea
+            name="description"
+            value={formValues.description}
+            onChange={handleInputChange}
+            required
+          />
+        </div>
         <FormInput
           label="Number of Chapters"
           type="number"
@@ -158,7 +180,7 @@ export function HomePage() {
           max="10"
         />
 
-        <button type="submit" disabled={loading}>
+        <button type="submit" disabled={loading} className="submit-button">
           {loading ? "Generating..." : "Generate Ebook"}
         </button>
       </form>
@@ -171,11 +193,88 @@ export function HomePage() {
       )}
 
       {bookContent && (
-        <>
+        <div className="book-content">
           <h2>Your Generated Book:</h2>
           <pre>{bookContent}</pre>
-        </>
+        </div>
       )}
+
+      <style jsx>{`
+        .container {
+          max-width: 600px;
+          margin: 0 auto;
+          padding: 2rem;
+          background-color: #f7f7f7;
+          border-radius: 12px;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+          font-family: Arial, sans-serif;
+          color: #333;
+        }
+        h1 {
+          text-align: center;
+          font-size: 2rem;
+          color: #333;
+          margin-bottom: 2rem;
+        }
+        .form {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        textarea {
+          padding: 0.8rem;
+          border-radius: 8px;
+          border: 1px solid #ccc;
+          background-color: #f9f9f9;
+          font-size: 1rem;
+          min-height: 120px;
+          resize: vertical;
+          transition: border-color 0.3s ease;
+          color: #333;
+        }
+        textarea:focus {
+          border-color: #0070f3;
+          outline: none;
+        }
+        .submit-button {
+          padding: 1rem 2rem;
+          background-color: #0070f3;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 1.2rem;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+        .submit-button:hover {
+          background-color: #005bb5;
+        }
+        .submit-button:disabled {
+          background-color: #ccc;
+          cursor: not-allowed;
+          color: #333;
+        }
+        .book-content {
+          margin-top: 2rem;
+          padding: 1.5rem;
+          background-color: #fff;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          font-size: 1rem;
+          color: #333;
+          white-space: pre-wrap; /* Mantém as quebras de linha */
+          word-wrap: break-word; /* Quebra palavras longas */
+          max-width: 100%; /* Limita a largura máxima ao tamanho do container */
+          overflow-wrap: break-word; /* Para garantir que longas palavras sejam quebradas */
+        }
+        pre {
+          font-family: monospace;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          color: #333;
+          white-space: break-spaces; /* Mantém as quebras de linha */
+        }
+      `}</style>
     </div>
   );
 }
