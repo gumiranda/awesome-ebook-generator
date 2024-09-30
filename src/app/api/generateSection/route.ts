@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
     // Novo prompt com informações de continuidade
     const prompt =
-      chapter === 0 && section === 0
+      chapter === 1 && section === 1
         ? `
     Write a book titled "${title}" in the genre "${genre}".
     The book has the following description: "${description}".   
