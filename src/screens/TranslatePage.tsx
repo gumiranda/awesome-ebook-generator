@@ -19,10 +19,35 @@ export function TranslatePage() {
 
   // Function to divide the text into smaller chunks up to 14,000 characters
   const divideTextIntoChunks = (text: string, chunkSize: number): string[] => {
+    const sentenceEndings = /([.!?])\s+/g;
+    const sentences = text.split(sentenceEndings).reduce(
+      (acc, part, index, array) => {
+        if (sentenceEndings.test(part)) {
+          acc[acc.length - 1] += part;
+        } else if (index < array.length - 1) {
+          acc.push(part);
+        }
+        return acc;
+      },
+      [""],
+    );
+
     const chunks = [];
-    for (let i = 0; i < text.length; i += chunkSize) {
-      chunks.push(text.slice(i, i + chunkSize));
+    let currentChunk = "";
+
+    for (const sentence of sentences) {
+      if ((currentChunk + sentence).length <= chunkSize) {
+        currentChunk += sentence;
+      } else {
+        chunks.push(currentChunk.trim());
+        currentChunk = sentence;
+      }
     }
+
+    if (currentChunk) {
+      chunks.push(currentChunk.trim());
+    }
+
     return chunks;
   };
 
