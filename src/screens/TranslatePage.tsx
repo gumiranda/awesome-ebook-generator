@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FormInput } from "./HomePage";
+import { FormInput } from "./HomePage/components/FormInput";
 
 export function TranslatePage() {
   const [formValues, setFormValues] = useState({

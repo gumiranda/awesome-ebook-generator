@@ -1,0 +1,145 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
+
+type BookContentJson = {
+  [chapter: number]: string;
+};
+export const useGenerateSection = () => {
+  const [formValues, setFormValues] = useState({
+    about: "",
+    chapters: 5,
+  });
+  const [ativarReview, setAtivarReview] = useState(0);
+  const [custo, setCusto] = useState(0);
+  const [bookContent, setBookContent] = useState("");
+  const [revisedContent, setRevisedContent] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState({
+    currentChapter: -1,
+  });
+  const [progress2, setProgress2] = useState({
+    currentChapter: -1,
+  });
+  const [bookContentJson, setBookContentJson] = useState<BookContentJson>({});
+
+  const generateSection = async (chapterNumber: number) => {
+    const { about } = formValues;
+    const previousChapter = chapterNumber - 1;
+    const prompt =
+      chapterNumber === 0
+        ? `
+Escreva o sumário de um livro sobre "${about}".   
+`
+        : chapterNumber === 1
+        ? `
+Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
+`
+        : ` Continue o capítulo ${previousChapter} e depois
+Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
+`;
+    const response = await fetch("/api/generateSection", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
+    });
+
+    const data = await response.json();
+    setCusto((prev) => prev + data.costInDollars);
+    return data.sectionContent;
+  };
+
+  useEffect(() => {
+    const generateNextSection = async () => {
+      const { currentChapter } = progress;
+      if (currentChapter === 0 || loading === false) return;
+
+      if (currentChapter <= Number(formValues.chapters)) {
+        const sectionContent = await generateSection(currentChapter);
+        setBookContentJson((prev) => ({
+          ...prev,
+          [currentChapter]: sectionContent,
+        }));
+        setBookContent((prev) => prev + `\n\n${sectionContent}`);
+      } else if (currentChapter < Number(formValues.chapters)) {
+        setProgress((prev) => ({
+          currentChapter: prev.currentChapter + 1,
+        }));
+      } else {
+        setLoading(false);
+      }
+    };
+
+    if (loading && ativarReview < 1) {
+      generateNextSection();
+    }
+  }, [progress, formValues, loading, ativarReview]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookContent(""); // Reset previous book content
+    setRevisedContent(""); // Reset revised content
+    setLoading(true);
+    setProgress({ currentChapter: 0 }); // Start from chapter 1,
+  };
+
+  const handleReviewText = async () => {
+    setAtivarReview((prev) => prev + 1);
+    setLoading(true);
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCopyContent = () => {
+    if (revisedContent) {
+      navigator.clipboard.writeText(revisedContent).then(
+        () => {
+          alert("Conteúdo revisado copiado para a área de transferência!");
+        },
+        () => {
+          alert("Falha ao copiar o conteúdo revisado. Tente novamente.");
+        },
+      );
+    }
+  };
+  const handleCopyContentOriginal = () => {
+    if (bookContent) {
+      navigator.clipboard.writeText(bookContent).then(
+        () => {
+          alert("Conteúdo original copiado para a área de transferência!");
+        },
+        () => {
+          alert("Falha ao copiar o conteúdo original. Tente novamente.");
+        },
+      );
+    }
+  };
+  return {
+    custo,
+    handleSubmit,
+    handleInputChange,
+    formValues,
+    loading,
+    bookContent,
+    revisedContent,
+    handleCopyContent,
+    handleCopyContentOriginal,
+    handleReviewText,
+    progress,
+    progress2,
+    setProgress2,
+    setRevisedContent,
+    setBookContent,
+    setLoading,
+    setProgress,
+    ativarReview,
+    setAtivarReview,
+    bookContentJson,
+  };
+};
