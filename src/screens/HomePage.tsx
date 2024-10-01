@@ -84,17 +84,28 @@ export function HomePage() {
     chapterNumber: number,
     sectionNumber: number,
   ) => {
+    const { title, genre, description } = formValues;
+    const previousSection = sectionNumber - 1;
+    const prompt =
+      chapterNumber === 1 && sectionNumber === 1
+        ? `
+Write a book titled "${title}" in the genre "${genre}".
+The book has the following description: "${description}".   
+`
+        : `
+Write section ${sectionNumber} for chapter ${chapterNumber} of a book titled "${title}" in the genre "${genre}".
+The book has the following description: "${description}". 
+
+Continue from the previous section: "${previousSection}".
+Ensure the new section flows naturally from the previous content, providing a smooth transition. 
+The section should hint at future developments to maintain reader engagement.  
+`;
     const response = await fetch("/api/generateSection", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        ...formValues,
-        chapter: chapterNumber,
-        section: sectionNumber,
-        previousSection: sectionNumber - 1,
-      }),
+      body: JSON.stringify({ prompt }),
     });
 
     const data = await response.json();
