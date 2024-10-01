@@ -29,27 +29,48 @@ export const useGenerateSection = () => {
     const prompt =
       chapterNumber === 0
         ? `
-Escreva o sumário de um livro sobre "${about}" que tenha ${formValues.chapters} capítulos.   
-`
+  Escreva o sumário de um livro sobre "${about}" que tenha ${formValues.chapters} capítulos.   
+  `
         : chapterNumber === 1
         ? `usar no mínimo 10000 tokens em cada seção do
-Capítulo ${chapterNumber} do sumario ${sumario}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
-`
-        : `usar no mínimo 10000 tokens  em cada seção do
-Capítulo ${chapterNumber} do sumario ${sumario} sem repetir informações do capítulo ${previousChapter}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
-`;
-    //         : ` Continue o capítulo ${previousChapter} e depois
-    // Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
-    // `;
-    const response = await fetch("/api/generateSection", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt }),
-    });
+  Capítulo ${chapterNumber} do sumario ${sumario}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
+  `
+        : `usar no mínimo 10000 tokens em cada seção do
+  Capítulo ${chapterNumber} do sumario ${sumario} sem repetir informações do capítulo ${previousChapter}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
+  `;
 
-    const data = await response.json();
+    let attempts = 0;
+    const maxAttempts = 3;
+    let success = false;
+    let data: any;
+
+    while (attempts < maxAttempts && !success) {
+      try {
+        const response = await fetch("/api/generateSection", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro na resposta da API");
+        }
+
+        data = await response.json();
+        success = true; // Se a resposta for bem-sucedida, encerra o loop.
+      } catch (error: any) {
+        attempts++;
+        console.error(error);
+        alert(`Tentativa ${attempts} falhou. Tentando novamente...`);
+        if (attempts >= maxAttempts) {
+          alert("Falha ao gerar a seção após várias tentativas.");
+          throw new Error("Erro persistente ao gerar a seção.");
+        }
+      }
+    }
+
     if (chapterNumber === 0) {
       setSumario(data.sectionContent);
     }
