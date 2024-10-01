@@ -13,6 +13,7 @@ export const useGenerateSection = () => {
   const [custo, setCusto] = useState(0);
   const [bookContent, setBookContent] = useState("");
   const [revisedContent, setRevisedContent] = useState("");
+  const [sumario, setSumario] = useState("");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState({
     currentChapter: -1,
@@ -28,15 +29,18 @@ export const useGenerateSection = () => {
     const prompt =
       chapterNumber === 0
         ? `
-Escreva o sumário de um livro sobre "${about}".   
+Escreva o sumário de um livro sobre "${about}" que tenha ${formValues.chapters} capítulos.   
 `
         : chapterNumber === 1
-        ? `
-Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
+        ? `usar no mínimo 10000 tokens em cada seção do
+Capítulo ${chapterNumber} do sumario ${sumario}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
 `
-        : ` Continue o capítulo ${previousChapter} e depois
-Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
+        : `usar no mínimo 10000 tokens  em cada seção do
+Capítulo ${chapterNumber} do sumario ${sumario} sem repetir informações do capítulo ${previousChapter}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
 `;
+    //         : ` Continue o capítulo ${previousChapter} e depois
+    // Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
+    // `;
     const response = await fetch("/api/generateSection", {
       method: "POST",
       headers: {
@@ -46,6 +50,9 @@ Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
     });
 
     const data = await response.json();
+    if (chapterNumber === 0) {
+      setSumario(data.sectionContent);
+    }
     setCusto((prev) => prev + data.costInDollars);
     return data.sectionContent;
   };
@@ -53,7 +60,7 @@ Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
   useEffect(() => {
     const generateNextSection = async () => {
       const { currentChapter } = progress;
-      if (currentChapter === 0 || loading === false) return;
+      if (currentChapter === -1 || loading === false) return;
 
       if (currentChapter <= Number(formValues.chapters)) {
         const sectionContent = await generateSection(currentChapter);
@@ -62,6 +69,9 @@ Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
           [currentChapter]: sectionContent,
         }));
         setBookContent((prev) => prev + `\n\n${sectionContent}`);
+        setProgress((prev) => ({
+          currentChapter: prev.currentChapter + 1,
+        }));
       } else if (currentChapter < Number(formValues.chapters)) {
         setProgress((prev) => ({
           currentChapter: prev.currentChapter + 1,
@@ -71,10 +81,10 @@ Capítulo ${chapterNumber}: usar no mínimo 3000 e no máximo 4000 tokens".
       }
     };
 
-    if (loading && ativarReview < 1) {
+    if (loading) {
       generateNextSection();
     }
-  }, [progress, formValues, loading, ativarReview]);
+  }, [progress, formValues, loading]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
