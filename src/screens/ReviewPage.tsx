@@ -62,8 +62,8 @@ export function ReviewPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        promptRewrite: `This is the ${chunkIndex} part of my text.  Rewrite the following text to improve its readability and coherence:\n\n${text}\n Ensure the new text part flows naturally from the previous content, providing a smooth transition. 
-    The section should hint at future developments to maintain reader engagement.`,
+        promptRewrite: `Reescreva a parte ${chunkIndex} do texto "${text}". Liste seus pontos-chave em ordem de importância. Comece com uma provocação de até seis palavras para capturar atenção. Use uma frase forte que destaque a informação principal. Explique por que isso é importante de forma clara e direta. Foque em UMA pessoa e UMA coisa que ela deve memorizar. Revise rigorosamente, eliminando palavras fracas e supérfluas. Use frases curtas, voz ativa, e destaque o essencial. Limite parágrafos a duas ou três frases e quebre o fluxo com tópicos, exemplos, citações e palavras fortes. Elimine advérbios, palavras fracas e palavras difíceis. Seja direto, sucinto e claro.
+`,
       }),
     });
 
@@ -130,7 +130,7 @@ export function ReviewPage() {
       <form onSubmit={handleSubmit} className="form">
         {/* Full text field */}
         <div className="input-container">
-          <label>Text</label>
+          <label>Texto</label>
           <textarea
             name="fullText"
             value={formValues.fullText}
