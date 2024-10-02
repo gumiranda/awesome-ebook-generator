@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FormInput } from "./HomePage/components/FormInput";
 
-export function TranslatePage() {
+export function CodeRaiz() {
   const [formValues, setFormValues] = useState({
     language: "",
     fullText: "", // Full text field
@@ -14,36 +14,60 @@ export function TranslatePage() {
   const [loading, setLoading] = useState(false); // Track if the process is ongoing
   const [progress, setProgress] = useState(0); // Track progress of the review process
 
-  const MAX_CHUNK_SIZE = 14000; // Max chunk size (14,000 characters)
+  const MAX_CHUNK_SIZE = 10000; // Max chunk size (14,000 characters)
   const [textChunks, setTextChunks] = useState<string[]>([]); // To store text chunks
-
-  // Function to divide the text into smaller chunks up to 14,000 characters
   const divideTextIntoChunks = (text: string, chunkSize: number): string[] => {
     const sentenceEndings = /([.!?])\s+/g;
-    const sentences = text.split(sentenceEndings).reduce(
-      (acc, part, index, array) => {
-        if (sentenceEndings.test(part)) {
-          acc[acc.length - 1] += part;
-        } else if (index < array.length - 1) {
-          acc.push(part);
-        }
-        return acc;
-      },
-      [""],
-    );
+    const codeBlockRegex = /(```[\s\S]*?```)/g; // Regex para blocos de código
 
-    const chunks = [];
+    // Primeiro, vamos separar os blocos de código do resto do texto
+    const parts = text.split(codeBlockRegex);
+
+    const chunks: string[] = [];
     let currentChunk = "";
 
-    for (const sentence of sentences) {
-      if ((currentChunk + sentence).length <= chunkSize) {
-        currentChunk += sentence;
+    // Função auxiliar para dividir frases normalmente
+    const splitSentences = (textPart: string): string[] => {
+      const sentences = textPart.split(sentenceEndings).reduce(
+        (acc, part, index, array) => {
+          if (sentenceEndings.test(part)) {
+            acc[acc.length - 1] += part;
+          } else if (index < array.length - 1) {
+            acc.push(part);
+          }
+          return acc;
+        },
+        [""],
+      );
+
+      return sentences;
+    };
+
+    // Iterar sobre as partes que podem ser texto ou bloco de código
+    for (const part of parts) {
+      if (codeBlockRegex.test(part)) {
+        // Se for um bloco de código, adicionamos diretamente como um chunk separado
+        if (currentChunk) {
+          chunks.push(currentChunk.trim());
+          currentChunk = "";
+        }
+        chunks.push(part.trim()); // Adiciona o bloco de código
       } else {
-        chunks.push(currentChunk.trim());
-        currentChunk = sentence;
+        // Se for texto normal, dividir em frases e depois em chunks
+        const sentences = splitSentences(part);
+
+        for (const sentence of sentences) {
+          if ((currentChunk + sentence).length <= chunkSize) {
+            currentChunk += sentence;
+          } else {
+            chunks.push(currentChunk.trim());
+            currentChunk = sentence;
+          }
+        }
       }
     }
 
+    // Adicionar o último chunk se houver
     if (currentChunk) {
       chunks.push(currentChunk.trim());
     }
@@ -59,8 +83,7 @@ export function TranslatePage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        promptRewrite: `This is the ${chunkIndex} part of my text.  Translate the following text to ${formValues.language}:\n\n${text}\n Ensure the new text part flows naturally from the previous content, providing a smooth transition. 
-    The section should hint at future developments to maintain reader engagement. Write in ${formValues.language}`,
+        promptRewrite: `This is the ${chunkIndex} part of my text. Translate the following text to ${formValues.language}:\n\n${text}\n Apply code examples in uber clone system. Write in ${formValues.language} using max 10000 caracters. `,
       }),
     });
 

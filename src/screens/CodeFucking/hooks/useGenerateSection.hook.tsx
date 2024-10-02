@@ -8,6 +8,7 @@ export const useGenerateSection = () => {
   const [formValues, setFormValues] = useState({
     about: "",
     chapters: 5,
+    technology: "",
   });
   const [ativarReview, setAtivarReview] = useState(0);
   const [custo, setCusto] = useState(0);
@@ -24,21 +25,16 @@ export const useGenerateSection = () => {
   const [bookContentJson, setBookContentJson] = useState<BookContentJson>({});
 
   const generateSection = async (chapterNumber: number) => {
-    const { about } = formValues;
+    const { about, chapters, technology } = formValues;
     const previousChapter = chapterNumber - 1;
     const prompt =
       chapterNumber === 0
-        ? `
-  Escreva o sumário de um livro sobre "${about}" que tenha ${formValues.chapters} capítulos. 
-  Liste os pontos mais importantes que você precisa apresentar. Escreva-os em ordem de importância. O primeiro é o que tem mais chance de ser lembrado.
-  `
-        : chapterNumber === 1
-        ? `usar no mínimo 10000 tokens em cada seção do
-  Capítulo ${chapterNumber} do sumario ${sumario}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
-  `
-        : `usar no mínimo 10000 tokens em cada seção do
-  Capítulo ${chapterNumber} do sumario ${sumario} sem repetir informações do capítulo ${previousChapter}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
-  `;
+        ? `liste por extenso ${chapters} coisas que ${about} precisa ter.`
+        : `Escreva o código usando ${technology} para o item ${chapterNumber} da lista "${sumario}" ${
+            chapterNumber > 1
+              ? ` juntando e melhorando o código anterior ${bookContentJson[previousChapter]}`
+              : ""
+          }. Não diga nada, apenas escreva o código.`;
 
     let attempts = 0;
     const maxAttempts = 15;
