@@ -23,30 +23,56 @@ export function ReviewPage() {
   // Function to divide the text into smaller chunks up to 14,000 characters
   const divideTextIntoChunks = (text: string, chunkSize: number): string[] => {
     const sentenceEndings = /([.!?])\s+/g;
-    const sentences = text.split(sentenceEndings).reduce(
-      (acc, part, index, array) => {
-        if (sentenceEndings.test(part)) {
-          acc[acc.length - 1] += part;
-        } else if (index < array.length - 1) {
-          acc.push(part);
-        }
-        return acc;
-      },
-      [""],
-    );
+    const codeBlockRegex = /(```[\s\S]*?```)/g; // Regex para blocos de código
 
-    const chunks = [];
+    // Primeiro, vamos separar os blocos de código do resto do texto
+    const parts = text.split(codeBlockRegex);
+
+    const chunks: string[] = [];
     let currentChunk = "";
 
-    for (const sentence of sentences) {
-      if ((currentChunk + sentence).length <= chunkSize) {
-        currentChunk += sentence;
+    // Função auxiliar para dividir frases normalmente
+    const splitSentences = (textPart: string): string[] => {
+      const sentences = textPart.split(sentenceEndings).reduce(
+        (acc, part, index, array) => {
+          if (sentenceEndings.test(part)) {
+            acc[acc.length - 1] += part;
+          } else if (index < array.length - 1) {
+            acc.push(part);
+          }
+          return acc;
+        },
+        [""],
+      );
+
+      return sentences;
+    };
+
+    // Iterar sobre as partes que podem ser texto ou bloco de código
+    for (const part of parts) {
+      if (codeBlockRegex.test(part)) {
+        // Se for um bloco de código, adicionamos diretamente como um chunk separado
+        if (currentChunk) {
+          chunks.push(currentChunk.trim());
+          currentChunk = "";
+        }
+        chunks.push(part.trim()); // Adiciona o bloco de código
       } else {
-        chunks.push(currentChunk.trim());
-        currentChunk = sentence;
+        // Se for texto normal, dividir em frases e depois em chunks
+        const sentences = splitSentences(part);
+
+        for (const sentence of sentences) {
+          if ((currentChunk + sentence).length <= chunkSize) {
+            currentChunk += sentence;
+          } else {
+            chunks.push(currentChunk.trim());
+            currentChunk = sentence;
+          }
+        }
       }
     }
 
+    // Adicionar o último chunk se houver
     if (currentChunk) {
       chunks.push(currentChunk.trim());
     }

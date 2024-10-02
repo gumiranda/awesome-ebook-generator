@@ -14,7 +14,7 @@ export function CodeRaiz() {
   const [loading, setLoading] = useState(false); // Track if the process is ongoing
   const [progress, setProgress] = useState(0); // Track progress of the review process
 
-  const MAX_CHUNK_SIZE = 10000; // Max chunk size (14,000 characters)
+  const MAX_CHUNK_SIZE = 14500; // Max chunk size (14,000 characters)
   const [textChunks, setTextChunks] = useState<string[]>([]); // To store text chunks
   const divideTextIntoChunks = (text: string, chunkSize: number): string[] => {
     const sentenceEndings = /([.!?])\s+/g;
@@ -83,7 +83,7 @@ export function CodeRaiz() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        promptRewrite: `This is the ${chunkIndex} part of my text. Translate the following text to ${formValues.language}:\n\n${text}\n Apply code examples in uber clone system. Write in ${formValues.language} using max 10000 caracters. `,
+        promptRewrite: `This is the ${chunkIndex} part of my text. Translate following text to ${formValues.language}:\n\n${text}\n. Write in ${formValues.language}.`,
       }),
     });
 
