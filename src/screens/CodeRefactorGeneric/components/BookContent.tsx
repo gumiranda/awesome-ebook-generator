@@ -3,13 +3,13 @@
 import React from "react";
 
 export const BookContent = ({
-  props: { bookContent, handleCopyContentOriginal, handleReviewText },
+  props: { bookContent, copyOriginalContent, handleReviewText },
 }: any) => (
   <div className="book-content">
     <h2>Generated Book:</h2>
     <pre>{bookContent}</pre>
     <div style={{ display: "flex", flexDirection: "column" }}>
-      <button onClick={handleCopyContentOriginal} className="copy-button">
+      <button onClick={copyOriginalContent} className="copy-button">
         Copy Original Content
       </button>
       <button onClick={handleReviewText} className="review-button">

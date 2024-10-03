@@ -13,7 +13,7 @@ export function CodeRefactorGeneric() {
     formValues,
     loading,
     bookContent,
-    handleCopyContentOriginal,
+    copyOriginalContent,
     handleReviewText,
     progress,
   } = useGenerateSection();
@@ -30,7 +30,7 @@ export function CodeRefactorGeneric() {
         <BookContent
           props={{
             bookContent,
-            handleCopyContentOriginal,
+            copyOriginalContent,
             handleReviewText,
           }}
         />

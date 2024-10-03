@@ -1,211 +1,229 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
-type BookContentJson = {
-  [chapter: number]: string;
+// Custom hook for form state management
+const useForm = (initialValues: {
+  about: string;
+  chapters: number;
+  technology: string;
+}) => {
+  const [formValues, setFormValues] = useState(initialValues);
+
+  const handleInputChange = useCallback(({ target: { name, value } }: any) => {
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  }, []);
+
+  return [formValues, handleInputChange];
 };
-const getPrompt = ({
-  chapterNumber,
-  about,
-  chapters,
-  technology,
-  sumario,
-  bookContentJson,
-  previousChapter,
-}: any) => {
-  switch (chapterNumber) {
-    case 0:
-      return `I have a piece of code using ${technology} and I need you do a refactor of it: ${about}`;
-    case 1:
-      return `Refactor the following code into multiple methods to improve readability and maintainability: ${sumario}`;
-    case 2:
-      return `Refactor the following code to improve performance: ${bookContentJson[previousChapter]}`;
-    case 3:
-      return `Refactor the following code to improve security: ${bookContentJson[previousChapter]}`;
-    case 4:
-      return `Refactor the following code to improve DX (developer experience): ${bookContentJson[previousChapter]}`;
-    case 5:
-      return `Rewrite the code below following the clean code principles for ${technology}: ${bookContentJson[previousChapter]}`;
-    case 6:
-      return `Please write unit tests to ensure its proper functioning in ${technology}: ${bookContentJson[previousChapter]}`;
-    default:
-      return `Reescreva o código "${bookContentJson[previousChapter]}" que usa ${technology} aplicando ${chapters} melhorias`;
+
+// Helper function for making authorized API requests
+const fetchUrl = async (url: string | URL | Request, options = {}) => {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
   }
+
+  const result = await response.json();
+  if (!result || typeof result !== "object") {
+    throw new Error("Invalid response format");
+  }
+
+  return result;
 };
+
+// Custom hook for managing progress state and chapter generation logic
+interface FormValues {
+  about: string;
+  chapters: number;
+  technology: string;
+}
+
+const useProgress = (
+  formValues: FormValues,
+  initialSumario = "",
+  initialBookContentJson: { [key: number]: string } = {},
+) => {
+  const [progress, setProgress] = useState({ currentChapter: -1 });
+  const [bookContent, setBookContent] = useState("");
+  const [sumario, setSumario] = useState(initialSumario);
+  const [loading, setLoading] = useState(false);
+  const [custo, setCusto] = useState(0);
+  const [bookContentJson, setBookContentJson] = useState(
+    initialBookContentJson,
+  );
+
+  const buildPrompt = useCallback(
+    (chapterNumber: any) => {
+      const { about, technology, chapters } = formValues;
+      const previousChapter = chapterNumber - 1;
+
+      const prompts = [
+        `I have a piece of code using ${technology} and I need you to refactor it: "${about}". No further instructions. Just code`,
+        `Refactor the following code into multiple methods to improve readability and maintainability: "${sumario}". No further instructions. Just code`,
+        `Refactor the following code to improve performance: "${bookContentJson[previousChapter]}". No further instructions. Just code`,
+        `Refactor the following code to improve security: "${bookContentJson[previousChapter]}". No further instructions. Just code`,
+        `Refactor the following code to improve DX (developer experience): "${bookContentJson[previousChapter]}". No further instructions. Just code`,
+        `Rewrite the code below following the clean code principles for ${technology}: "${bookContentJson[previousChapter]}". No further instructions. Just code`,
+        //`Please write unit tests to ensure its proper functioning in ${technology}: ${bookContentJson[previousChapter]}`,
+      ];
+
+      return (
+        prompts[chapterNumber] ||
+        `Rewrite code "${bookContentJson[previousChapter]}" using ${technology}. No further instructions. Just code ${chapters} improvements.`
+      );
+    },
+    [formValues, sumario, bookContentJson],
+  );
+
+  const fetchSectionContent = useCallback(async (prompt: string) => {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const data = await fetchUrl("/api/generateSection", {
+          method: "POST",
+          body: JSON.stringify({ prompt }),
+        });
+        return data;
+      } catch (error) {
+        console.error(`Attempt ${attempt + 1} failed:`, error);
+        if (attempt === 2)
+          alert("Failed to generate section after multiple attempts");
+      }
+    }
+    throw new Error("Persistent error generating section");
+  }, []);
+
+  const generateSection = useCallback(
+    async (chapterNumber: number) => {
+      const prompt = buildPrompt(chapterNumber);
+      const data = await fetchSectionContent(prompt);
+      if (!data) return;
+
+      if (chapterNumber === 0) setSumario(data.sectionContent);
+      setCusto((prev) => prev + data.costInDollars);
+      return data.sectionContent;
+    },
+    [buildPrompt, fetchSectionContent],
+  );
+
+  const generateNextSection = useCallback(async () => {
+    if (progress.currentChapter === -1 || !loading) return;
+
+    const maxChapters = Number(formValues.chapters);
+    if (progress.currentChapter < maxChapters) {
+      try {
+        const sectionContent = await generateSection(progress.currentChapter);
+        if (sectionContent) {
+          setBookContentJson((prev) => ({
+            ...prev,
+            [progress.currentChapter]: sectionContent,
+          }));
+          setBookContent((prev) => `${prev}\n\n${sectionContent}`);
+          setProgress((prev) => ({
+            currentChapter: prev.currentChapter + 1,
+          }));
+        }
+      } catch (error) {
+        console.error("Error generating section:", error);
+      }
+    } else {
+      setLoading(false);
+    }
+  }, [
+    progress,
+    formValues,
+    loading,
+    generateSection,
+    setBookContentJson,
+    setBookContent,
+  ]);
+
+  return {
+    progress,
+    setProgress,
+    loading,
+    setLoading,
+    bookContent,
+    setBookContent,
+    custo,
+    sumario,
+    generateNextSection,
+  };
+};
+
 export const useGenerateSection = () => {
-  const [formValues, setFormValues] = useState({
+  const [formValues, handleInputChange] = useForm({
     about: "",
     chapters: 5,
     technology: "",
   });
-  const [ativarReview, setAtivarReview] = useState(0);
-  const [custo, setCusto] = useState(0);
-  const [bookContent, setBookContent] = useState("");
   const [revisedContent, setRevisedContent] = useState("");
-  const [sumario, setSumario] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState({
-    currentChapter: -1,
-  });
-  const [progress2, setProgress2] = useState({
-    currentChapter: -1,
-  });
-  const [bookContentJson, setBookContentJson] = useState<BookContentJson>({});
+  const [ativarReview, setAtivarReview] = useState(0);
 
-  const generateSection = async (chapterNumber: number) => {
-    const { about, chapters, technology } = formValues;
-    const previousChapter = chapterNumber - 1;
-    const prompt = getPrompt({
-      chapterNumber,
-      about,
-      chapters,
-      technology,
-      sumario,
-      bookContentJson,
-      previousChapter,
-    });
+  const {
+    progress,
+    setProgress,
+    loading,
+    setLoading,
+    bookContent,
+    setBookContent,
+    custo,
+    generateNextSection,
+  } = useProgress(formValues as any);
 
-    // const prompt =
-    //   chapterNumber === 0
-    //     ? `liste por extenso ${chapters} melhorias de usabilidade e estilização que esse código ${about} precisa ter.`
-    //     : `Escreva o código usando ${technology} do item ${chapterNumber} da lista "${sumario}" ${
-    //         chapterNumber > 1
-    //           ? ` levando em conta código anterior ${bookContentJson[previousChapter]}`
-    //           : `levando em conta o código ${about}`
-    //       }. Não diga nada, apenas escreva o código.`;
-
-    let attempts = 0;
-    const maxAttempts = 15;
-    let success = false;
-    let data: any;
-
-    while (attempts < maxAttempts && !success) {
+  const copyToClipboard = useCallback(
+    async (content: string, alertMessage: any) => {
       try {
-        const response = await fetch("/api/generateSection", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ prompt }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Erro na resposta da API");
-        }
-
-        data = await response.json();
-        success = true; // Se a resposta for bem-sucedida, encerra o loop.
-      } catch (error: any) {
-        attempts++;
-        console.error(error);
-        alert(`Tentativa ${attempts} falhou. Tentando novamente...`);
-        if (attempts >= maxAttempts) {
-          alert("Falha ao gerar a seção após várias tentativas.");
-          throw new Error("Erro persistente ao gerar a seção.");
-        }
+        await navigator.clipboard.writeText(content);
+        alert(alertMessage);
+      } catch {
+        alert("Failed to copy content. Please try again.");
       }
-    }
-
-    if (chapterNumber === 0) {
-      setSumario(data.sectionContent);
-    }
-    setCusto((prev) => prev + data.costInDollars);
-    return data.sectionContent;
-  };
+    },
+    [],
+  );
 
   useEffect(() => {
-    const generateNextSection = async () => {
-      const { currentChapter } = progress;
-      if (currentChapter === -1 || loading === false) return;
+    if (loading) generateNextSection();
+  }, [generateNextSection, loading]);
 
-      if (currentChapter <= Number(formValues.chapters)) {
-        const sectionContent = await generateSection(currentChapter);
-        setBookContentJson((prev) => ({
-          ...prev,
-          [currentChapter]: sectionContent,
-        }));
-        setBookContent((prev) => prev + `\n\n${sectionContent}`);
-        setProgress((prev) => ({
-          currentChapter: prev.currentChapter + 1,
-        }));
-      } else if (currentChapter < Number(formValues.chapters)) {
-        setProgress((prev) => ({
-          currentChapter: prev.currentChapter + 1,
-        }));
-      } else {
-        setLoading(false);
-      }
-    };
-
-    if (loading) {
-      generateNextSection();
-    }
-  }, [progress, formValues, loading]);
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    setBookContent(""); // Reset previous book content
-    setRevisedContent(""); // Reset revised content
+    setBookContent("");
+    setRevisedContent("");
     setLoading(true);
-    setProgress({ currentChapter: 0 }); // Start from chapter 1,
+    setProgress({ currentChapter: 0 });
   };
 
-  const handleReviewText = async () => {
+  const handleReviewText = useCallback(() => {
     setAtivarReview((prev) => prev + 1);
     setLoading(true);
-  };
+  }, []);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormValues((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleCopyContent = () => {
-    if (revisedContent) {
-      navigator.clipboard.writeText(revisedContent).then(
-        () => {
-          alert("Conteúdo revisado copiado para a área de transferência!");
-        },
-        () => {
-          alert("Falha ao copiar o conteúdo revisado. Tente novamente.");
-        },
-      );
-    }
-  };
-  const handleCopyContentOriginal = () => {
-    if (bookContent) {
-      navigator.clipboard.writeText(bookContent).then(
-        () => {
-          alert("Conteúdo original copiado para a área de transferência!");
-        },
-        () => {
-          alert("Falha ao copiar o conteúdo original. Tente novamente.");
-        },
-      );
-    }
-  };
   return {
     custo,
-    handleSubmit,
-    handleInputChange,
     formValues,
     loading,
     bookContent,
     revisedContent,
-    handleCopyContent,
-    handleCopyContentOriginal,
+    handleInputChange,
+    handleSubmit,
     handleReviewText,
     progress,
-    progress2,
-    setProgress2,
+    ativarReview,
+    copyOriginalContent: () =>
+      copyToClipboard(bookContent, "Original content copied to clipboard!"),
+    copyRevisedContent: () =>
+      copyToClipboard(revisedContent, "Revised content copied to clipboard!"),
     setRevisedContent,
     setBookContent,
     setLoading,
     setProgress,
-    ativarReview,
     setAtivarReview,
-    bookContentJson,
+    bookContentJson: {},
   };
 };
