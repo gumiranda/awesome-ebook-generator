@@ -1,3 +1,3 @@
-import { EstablishmentList } from "@/screens/EstablishmentList";
+import EstablishmentList from "@/screens/EstablishmentList";
 
 export default EstablishmentList;
