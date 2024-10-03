@@ -1,35 +1,20 @@
-import React, { CSSProperties } from "react";
+import React, { memo } from "react";
 
-export const EstablishmentList = () => {
-  // Sample data for establishments
-  const establishments = [
-    { id: 1, name: "Coffee Shop", address: "123 Main St" },
-    { id: 2, name: "Bookstore", address: "456 Market Ave" },
-    { id: 3, name: "Restaurant", address: "789 Ocean Dr" },
-  ];
+// Establishment data
+const establishments = [
+  { id: 1, name: "Coffee Shop", address: "123 Main St" },
+  { id: 2, name: "Bookstore", address: "456 Market Ave" },
+  { id: 3, name: "Restaurant", address: "789 Ocean Dr" },
+];
 
-  return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>List of Establishments</h1>
-      <ul style={styles.list}>
-        {establishments.map((establishment) => (
-          <li key={establishment.id} style={styles.listItem}>
-            <h3 style={styles.name}>{establishment.name}</h3>
-            <p style={styles.address}>{establishment.address}</p>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-};
-
-const styles: { [key: string]: CSSProperties } = {
+// Styles
+const styles = {
   container: {
     padding: "20px",
     fontFamily: "Arial, sans-serif",
   },
   heading: {
-    textAlign: "center",
+    textAlign: "center" as const,
   },
   list: {
     listStyleType: "none",
@@ -49,3 +34,30 @@ const styles: { [key: string]: CSSProperties } = {
     color: "#555",
   },
 };
+
+// Memoized EstablishmentItem component
+interface EstablishmentItemProps {
+  name: string;
+  address: string;
+}
+
+const EstablishmentItem = memo(({ name, address }: EstablishmentItemProps) => (
+  <li style={styles.listItem}>
+    <h3 style={styles.name}>{name}</h3>
+    <p style={styles.address}>{address}</p>
+  </li>
+));
+
+EstablishmentItem.displayName = "EstablishmentItem";
+
+// EstablishmentList component
+export const EstablishmentList = () => (
+  <div style={styles.container}>
+    <h1 style={styles.heading}>List of Establishments</h1>
+    <ul style={styles.list}>
+      {establishments.map(({ id, name, address }) => (
+        <EstablishmentItem key={id} name={name} address={address} />
+      ))}
+    </ul>
+  </div>
+);
