@@ -1,0 +1,211 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
+
+type BookContentJson = {
+  [chapter: number]: string;
+};
+const getPrompt = ({
+  chapterNumber,
+  about,
+  chapters,
+  technology,
+  sumario,
+  bookContentJson,
+  previousChapter,
+}: any) => {
+  switch (chapterNumber) {
+    case 0:
+      return `I have a piece of code using ${technology} and I need you do a refactor of it: ${about}`;
+    case 1:
+      return `Refactor the following code into multiple methods to improve readability and maintainability: ${sumario}`;
+    case 2:
+      return `Refactor the following code to improve performance: ${bookContentJson[previousChapter]}`;
+    case 3:
+      return `Refactor the following code to improve security: ${bookContentJson[previousChapter]}`;
+    case 4:
+      return `Refactor the following code to improve DX (developer experience): ${bookContentJson[previousChapter]}`;
+    case 5:
+      return `Rewrite the code below following the clean code principles for ${technology}: ${bookContentJson[previousChapter]}`;
+    case 6:
+      return `Please write unit tests to ensure its proper functioning in ${technology}: ${bookContentJson[previousChapter]}`;
+    default:
+      return `Reescreva o código "${bookContentJson[previousChapter]}" que usa ${technology} aplicando ${chapters} melhorias`;
+  }
+};
+export const useGenerateSection = () => {
+  const [formValues, setFormValues] = useState({
+    about: "",
+    chapters: 5,
+    technology: "",
+  });
+  const [ativarReview, setAtivarReview] = useState(0);
+  const [custo, setCusto] = useState(0);
+  const [bookContent, setBookContent] = useState("");
+  const [revisedContent, setRevisedContent] = useState("");
+  const [sumario, setSumario] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState({
+    currentChapter: -1,
+  });
+  const [progress2, setProgress2] = useState({
+    currentChapter: -1,
+  });
+  const [bookContentJson, setBookContentJson] = useState<BookContentJson>({});
+
+  const generateSection = async (chapterNumber: number) => {
+    const { about, chapters, technology } = formValues;
+    const previousChapter = chapterNumber - 1;
+    const prompt = getPrompt({
+      chapterNumber,
+      about,
+      chapters,
+      technology,
+      sumario,
+      bookContentJson,
+      previousChapter,
+    });
+
+    // const prompt =
+    //   chapterNumber === 0
+    //     ? `liste por extenso ${chapters} melhorias de usabilidade e estilização que esse código ${about} precisa ter.`
+    //     : `Escreva o código usando ${technology} do item ${chapterNumber} da lista "${sumario}" ${
+    //         chapterNumber > 1
+    //           ? ` levando em conta código anterior ${bookContentJson[previousChapter]}`
+    //           : `levando em conta o código ${about}`
+    //       }. Não diga nada, apenas escreva o código.`;
+
+    let attempts = 0;
+    const maxAttempts = 15;
+    let success = false;
+    let data: any;
+
+    while (attempts < maxAttempts && !success) {
+      try {
+        const response = await fetch("/api/generateSection", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro na resposta da API");
+        }
+
+        data = await response.json();
+        success = true; // Se a resposta for bem-sucedida, encerra o loop.
+      } catch (error: any) {
+        attempts++;
+        console.error(error);
+        alert(`Tentativa ${attempts} falhou. Tentando novamente...`);
+        if (attempts >= maxAttempts) {
+          alert("Falha ao gerar a seção após várias tentativas.");
+          throw new Error("Erro persistente ao gerar a seção.");
+        }
+      }
+    }
+
+    if (chapterNumber === 0) {
+      setSumario(data.sectionContent);
+    }
+    setCusto((prev) => prev + data.costInDollars);
+    return data.sectionContent;
+  };
+
+  useEffect(() => {
+    const generateNextSection = async () => {
+      const { currentChapter } = progress;
+      if (currentChapter === -1 || loading === false) return;
+
+      if (currentChapter <= Number(formValues.chapters)) {
+        const sectionContent = await generateSection(currentChapter);
+        setBookContentJson((prev) => ({
+          ...prev,
+          [currentChapter]: sectionContent,
+        }));
+        setBookContent((prev) => prev + `\n\n${sectionContent}`);
+        setProgress((prev) => ({
+          currentChapter: prev.currentChapter + 1,
+        }));
+      } else if (currentChapter < Number(formValues.chapters)) {
+        setProgress((prev) => ({
+          currentChapter: prev.currentChapter + 1,
+        }));
+      } else {
+        setLoading(false);
+      }
+    };
+
+    if (loading) {
+      generateNextSection();
+    }
+  }, [progress, formValues, loading]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setBookContent(""); // Reset previous book content
+    setRevisedContent(""); // Reset revised content
+    setLoading(true);
+    setProgress({ currentChapter: 0 }); // Start from chapter 1,
+  };
+
+  const handleReviewText = async () => {
+    setAtivarReview((prev) => prev + 1);
+    setLoading(true);
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCopyContent = () => {
+    if (revisedContent) {
+      navigator.clipboard.writeText(revisedContent).then(
+        () => {
+          alert("Conteúdo revisado copiado para a área de transferência!");
+        },
+        () => {
+          alert("Falha ao copiar o conteúdo revisado. Tente novamente.");
+        },
+      );
+    }
+  };
+  const handleCopyContentOriginal = () => {
+    if (bookContent) {
+      navigator.clipboard.writeText(bookContent).then(
+        () => {
+          alert("Conteúdo original copiado para a área de transferência!");
+        },
+        () => {
+          alert("Falha ao copiar o conteúdo original. Tente novamente.");
+        },
+      );
+    }
+  };
+  return {
+    custo,
+    handleSubmit,
+    handleInputChange,
+    formValues,
+    loading,
+    bookContent,
+    revisedContent,
+    handleCopyContent,
+    handleCopyContentOriginal,
+    handleReviewText,
+    progress,
+    progress2,
+    setProgress2,
+    setRevisedContent,
+    setBookContent,
+    setLoading,
+    setProgress,
+    ativarReview,
+    setAtivarReview,
+    bookContentJson,
+  };
+};
