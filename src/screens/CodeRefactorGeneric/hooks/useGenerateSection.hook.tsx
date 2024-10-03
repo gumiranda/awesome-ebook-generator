@@ -63,12 +63,10 @@ const useProgress = (
       const previousChapter = chapterNumber - 1;
 
       const prompts = [
-        `I have a piece of code using ${technology} and I need you to refactor it: "${about}". No further instructions. Just code`,
+        `Rewrite the code below following the clean code principles for ${technology}: "${about}". No further instructions. Just code`,
         `Refactor the following code into multiple methods to improve readability and maintainability: "${sumario}". No further instructions. Just code`,
-        `Refactor the following code to improve performance: "${bookContentJson[previousChapter]}". No further instructions. Just code`,
-        `Refactor the following code to improve security: "${bookContentJson[previousChapter]}". No further instructions. Just code`,
+        `Refactor each method into multiple methods to improve readability and maintainability: "${sumario}". No further instructions. Just code`,
         `Refactor the following code to improve DX (developer experience): "${bookContentJson[previousChapter]}". No further instructions. Just code`,
-        `Rewrite the code below following the clean code principles for ${technology}: "${bookContentJson[previousChapter]}". No further instructions. Just code`,
         //`Please write unit tests to ensure its proper functioning in ${technology}: ${bookContentJson[previousChapter]}`,
       ];
 
@@ -202,7 +200,7 @@ export const useGenerateSection = () => {
   const handleReviewText = useCallback(() => {
     setAtivarReview((prev) => prev + 1);
     setLoading(true);
-  }, []);
+  }, [setLoading]);
 
   return {
     custo,
