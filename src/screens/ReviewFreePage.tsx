@@ -1,13 +1,15 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { FormInput } from "./HomePage/components/FormInput";
 
-export function TranslateFreePage() {
+export function ReviewFreePage() {
   const [formValues, setFormValues] = useState({
-    language: "",
+    title: "",
+    genre: "",
+    description: "",
+    chapters: 5,
+    totalSections: 3,
     fullText: "", // Full text field
-    source: "pt",
   });
 
   const [custo, setCusto] = useState(0); // Cost tracking
@@ -21,30 +23,56 @@ export function TranslateFreePage() {
   // Function to divide the text into smaller chunks up to 14,000 characters
   const divideTextIntoChunks = (text: string, chunkSize: number): string[] => {
     const sentenceEndings = /([.!?])\s+/g;
-    const sentences = text.split(sentenceEndings).reduce(
-      (acc, part, index, array) => {
-        if (sentenceEndings.test(part)) {
-          acc[acc.length - 1] += part;
-        } else if (index < array.length - 1) {
-          acc.push(part);
-        }
-        return acc;
-      },
-      [""],
-    );
+    const codeBlockRegex = /(```[\s\S]*?```)/g; // Regex para blocos de código
 
-    const chunks = [];
+    // Primeiro, vamos separar os blocos de código do resto do texto
+    const parts = text.split(codeBlockRegex);
+
+    const chunks: string[] = [];
     let currentChunk = "";
 
-    for (const sentence of sentences) {
-      if ((currentChunk + sentence).length <= chunkSize) {
-        currentChunk += sentence;
+    // Função auxiliar para dividir frases normalmente
+    const splitSentences = (textPart: string): string[] => {
+      const sentences = textPart.split(sentenceEndings).reduce(
+        (acc, part, index, array) => {
+          if (sentenceEndings.test(part)) {
+            acc[acc.length - 1] += part;
+          } else if (index < array.length - 1) {
+            acc.push(part);
+          }
+          return acc;
+        },
+        [""],
+      );
+
+      return sentences;
+    };
+
+    // Iterar sobre as partes que podem ser texto ou bloco de código
+    for (const part of parts) {
+      if (codeBlockRegex.test(part)) {
+        // Se for um bloco de código, adicionamos diretamente como um chunk separado
+        if (currentChunk) {
+          chunks.push(currentChunk.trim());
+          currentChunk = "";
+        }
+        chunks.push(part.trim()); // Adiciona o bloco de código
       } else {
-        chunks.push(currentChunk.trim());
-        currentChunk = sentence;
+        // Se for texto normal, dividir em frases e depois em chunks
+        const sentences = splitSentences(part);
+
+        for (const sentence of sentences) {
+          if ((currentChunk + sentence).length <= chunkSize) {
+            currentChunk += sentence;
+          } else {
+            chunks.push(currentChunk.trim());
+            currentChunk = sentence;
+          }
+        }
       }
     }
 
+    // Adicionar o último chunk se houver
     if (currentChunk) {
       chunks.push(currentChunk.trim());
     }
@@ -54,19 +82,14 @@ export function TranslateFreePage() {
 
   // Review a chunk of text asynchronously
   const reviewText = async (text: string, chunkIndex: number) => {
-    await new Promise((resolve) => setTimeout(resolve, 10000)); // Simulate API call
-    const response = await fetch("/api/translate", {
+    const response = await fetch("/api/generateSection", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        //     promptRewrite: `This is the ${chunkIndex} part of my text.  Translate the following text to ${formValues.language}:\n\n${text}\n Ensure the new text part flows naturally from the previous content, providing a smooth transition.
-        // The section should hint at future developments to maintain reader engagement. Write in ${formValues.language}`,
-
-        promptRewrite: `${text}\n MARKER`,
-        language: formValues.language,
-        source: formValues.source,
+        prompt: `Reescreva a parte ${chunkIndex} do texto "${text}". Liste seus pontos-chave em ordem de importância. Comece com uma provocação de até seis palavras para capturar atenção. Use uma frase forte que destaque a informação principal. Explique por que isso é importante de forma clara e direta. Foque em UMA pessoa e UMA coisa que ela deve memorizar. Revise rigorosamente, eliminando palavras fracas e supérfluas. Use frases curtas, voz ativa, e destaque o essencial. Limite parágrafos a duas ou três frases e quebre o fluxo com tópicos, exemplos, citações e palavras fortes. Elimine advérbios, palavras fracas e palavras difíceis. Seja direto, sucinto e claro.
+`,
       }),
     });
 
@@ -129,27 +152,17 @@ export function TranslateFreePage() {
   };
   return (
     <div className="container">
-      <h1>Translate Your Ebook</h1>
+      <h1>Rewrite Your Ebook</h1>
       <form onSubmit={handleSubmit} className="form">
         {/* Full text field */}
         <div className="input-container">
           <label>Texto</label>
           <textarea
+            name="fullText"
             value={formValues.fullText}
             onChange={handleInputChange}
-            name="fullText"
-          />{" "}
-          <FormInput
-            label="Source language (en,pt)"
-            value={formValues.source}
-            onChange={handleInputChange}
-            name="source"
-          />
-          <FormInput
-            label="Target language (en,pt)"
-            value={formValues.language}
-            onChange={handleInputChange}
-            name="language"
+            required
+            disabled={loading}
           />
         </div>
 
