@@ -84,7 +84,7 @@ const useProgress = (
   const fetchSectionContent = useCallback(async (prompt: string) => {
     for (let attempt = 0; attempt < 3000; attempt++) {
       try {
-        await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate API call
+        await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate API call
 
         const data = await fetchUrl("/api/generateSection", {
           method: "POST",
@@ -118,6 +118,8 @@ const useProgress = (
 
           // Verifica se o conteúdo não contém "desculpe" ou "desculpa"
           if (
+            data?.sectionContent &&
+            data?.sectionContent?.length > 0 &&
             !data?.sectionContent?.includes?.("undefined") &&
             !data?.sectionContent?.includes?.("Lamento") &&
             !data?.sectionContent?.includes?.("Desculpe") &&
