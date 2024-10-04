@@ -63,18 +63,15 @@ const useProgress = (
       const { about, technology, chapters } = formValues;
       const previousChapter = chapterNumber - 1;
       const prompts = [
-        `Escreve um prefácio de no mínimo 10000 caracteres de um livro sobre "${about}"`,
-        `Escreve uma introdução de no mínimo 10000 caracteres de um livro sobre "${about}"`,
-        `Escreve no mínimo 10000 caracteres no Capítulo ${chapterNumber} sobre ${
-          reactNativeChapters[chapterNumber - 1]
-        } num livro que aborda "${about}". Incluir exemplos concretos e citações de especialistas para apoiar as tuas afirmações.`,
+        `Escreve um prefácio de 12000 caracteres de um livro sobre "${about}"`,
+        `Escreve uma introdução de 12000 caracteres de um livro sobre "${about}"`,
       ];
 
       return (
         prompts[chapterNumber] ||
-        `Escreve no mínimo 10000 caracteres no Capítulo ${chapterNumber} sobre ${
+        `Escreve 12000 caracteres no Capítulo ${chapterNumber} sobre ${
           reactNativeChapters[chapterNumber - 1]
-        } num livro que aborda "${about}". Incluir exemplos concretos e citações de especialistas para apoiar as tuas afirmações.`
+        } num livro que aborda "${about}". Incluir 5 exemplos práticos de cada tópico.`
         //`Rewrite code "${bookContentJson[previousChapter]}" using ${technology}. No further instructions. Just code ${chapters} improvements.`
       );
     },
