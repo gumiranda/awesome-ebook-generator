@@ -121,10 +121,10 @@ const useProgress = (
             data?.sectionContent &&
             data?.sectionContent?.length > 0 &&
             !data?.sectionContent?.includes?.("undefined") &&
-            !data?.sectionContent?.includes?.("Lamento") &&
+            !data?.sectionContent?.includes?.("Lamento ") &&
             !data?.sectionContent?.includes?.("Desculpe") &&
             !data?.sectionContent?.includes?.("Desculpa") &&
-            !data?.sectionContent?.includes?.("lamento") &&
+            !data?.sectionContent?.includes?.(" lamento ") &&
             !data?.sectionContent?.includes?.("desculpe") &&
             !data?.sectionContent?.includes?.("desculpa")
           ) {
