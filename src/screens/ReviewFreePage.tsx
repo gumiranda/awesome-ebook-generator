@@ -82,6 +82,7 @@ export function ReviewFreePage() {
 
   // Review a chunk of text asynchronously
   const reviewText = async (text: string, chunkIndex: number) => {
+    await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate API call
     const response = await fetch("/api/generateSection", {
       method: "POST",
       headers: {

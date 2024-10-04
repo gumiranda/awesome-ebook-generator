@@ -5,11 +5,17 @@ export const BookForm = ({
 }: any) => {
   return (
     <form onSubmit={handleSubmit} className="form">
-      <FormInput
-        label="Sobre o que é o livro?"
+      <label>codigo</label>
+      <textarea
         value={formValues.about}
         onChange={handleInputChange}
         name="about"
+      />
+      <FormInput
+        label="Tecnologias utilizadas"
+        value={formValues.technology}
+        onChange={handleInputChange}
+        name="technology"
       />
 
       <FormInput
@@ -19,7 +25,7 @@ export const BookForm = ({
         onChange={handleInputChange}
         name="chapters"
         min="1"
-        max="150"
+        max="500"
       />
 
       <button type="submit" disabled={loading} className="submit-button">

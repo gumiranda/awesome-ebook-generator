@@ -19,7 +19,7 @@ export const BookForm = ({
         onChange={handleInputChange}
         name="chapters"
         min="1"
-        max="50"
+        max="150"
       />
 
       <button type="submit" disabled={loading} className="submit-button">

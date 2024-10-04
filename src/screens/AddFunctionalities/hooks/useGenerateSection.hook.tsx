@@ -88,6 +88,8 @@ const useProgress = (
   const fetchSectionContent = useCallback(async (prompt: string) => {
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate API call
+
         const data = await fetchUrl("/api/generateSection", {
           method: "POST",
           body: JSON.stringify({ prompt }),

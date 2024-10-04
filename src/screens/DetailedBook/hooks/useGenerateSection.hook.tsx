@@ -33,10 +33,10 @@ export const useGenerateSection = () => {
   Liste os pontos mais importantes que você precisa apresentar. Escreva-os em ordem de importância. O primeiro é o que tem mais chance de ser lembrado.
   `
         : chapterNumber === 1
-        ? `usar no mínimo 10000 tokens em cada seção do
+        ? `escrever em md no mínimo 10000 caracteres em cada seção do
   Capítulo ${chapterNumber} do sumario ${sumario}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
   `
-        : `usar no mínimo 10000 tokens em cada seção do
+        : `escrever em md no mínimo 10000 caracteres em cada seção do
   Capítulo ${chapterNumber} do sumario ${sumario} sem repetir informações do capítulo ${previousChapter}". Incluir exemplos e citações de especialistas para apoiar suas afirmações.
   `;
 

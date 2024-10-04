@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     const messages = [{ role: "user", content: prompt }];
 
     const text = await g4f.chatCompletion(messages, options);
-
+    console.log({ text });
     // const completion = await openai.chat.completions.create({
     //   model: "gpt-4o",
     //   messages: [{ role: "user", content: prompt }],
