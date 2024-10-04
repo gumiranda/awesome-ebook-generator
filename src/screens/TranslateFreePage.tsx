@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FormInput } from "./HomePage/components/FormInput";
 
-export function TranslatePage() {
+export function TranslateFreePage() {
   const [formValues, setFormValues] = useState({
     language: "",
     fullText: "", // Full text field
@@ -138,7 +138,7 @@ export function TranslatePage() {
             value={formValues.fullText}
             onChange={handleInputChange}
             name="fullText"
-          />
+          />{" "}
           <FormInput
             label="Source language (en,pt)"
             value={formValues.source}

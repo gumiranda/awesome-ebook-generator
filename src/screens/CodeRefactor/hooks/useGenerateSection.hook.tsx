@@ -43,6 +43,8 @@ export const useGenerateSection = () => {
 
     while (attempts < maxAttempts && !success) {
       try {
+        await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate API call
+
         const response = await fetch("/api/generateSection", {
           method: "POST",
           headers: {

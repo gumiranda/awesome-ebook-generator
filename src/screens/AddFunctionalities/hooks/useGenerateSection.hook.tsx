@@ -17,6 +17,8 @@ const useForm = (initialValues: {
 
 // Helper function for making authorized API requests
 const fetchUrl = async (url: string | URL | Request, options = {}) => {
+  await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate API call
+
   const response = await fetch(url, {
     ...options,
     headers: {
