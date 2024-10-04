@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
+import { reactNativeChapters } from "../chapters";
 
 // Custom hook for form state management
 const useForm = (initialValues: {
@@ -61,170 +62,19 @@ const useProgress = (
     (chapterNumber: any) => {
       const { about, technology, chapters } = formValues;
       const previousChapter = chapterNumber - 1;
-      const reactNativeChapters = [
-        "Introdução ao React Native",
-        "O que é React Native?",
-        "Instalação do React Native",
-        "Configuração do Ambiente de Desenvolvimento",
-        "Criando um Novo Projeto React Native",
-        "Estrutura de Pastas no React Native",
-        "Diferenças entre React e React Native",
-        "Componentes Básicos no React Native",
-        "Utilizando o componente View",
-        "Trabalhando com Text",
-        "Componentes de Imagem no React Native",
-        "Estilos no React Native",
-        "Flexbox no React Native",
-        "Posicionamento de Componentes",
-        "Estilos Dinâmicos",
-        "Uso de ScrollView",
-        "FlatList: Listas Performáticas",
-        "Seções em Listas: SectionList",
-        "Botões no React Native",
-        "Input de Texto com TextInput",
-        "Manipulando Inputs",
-        "Tratamento de Eventos",
-        "Componentes Controlados e Não Controlados",
-        "State e Props no React Native",
-        "Hook useState",
-        "Hook useEffect",
-        "Context API no React Native",
-        "Navegação com React Navigation",
-        "Stack Navigator",
-        "Tab Navigator",
-        "Drawer Navigator",
-        "Navegação aninhada",
-        "Passando parâmetros entre telas",
-        "Redux no React Native",
-        "Implementando Redux",
-        "Ações e Redutores",
-        "Thunk e Middleware",
-        "Persistência de Estado com Redux Persist",
-        "Gerenciamento de Estados com MobX",
-        "React Query no React Native",
-        "Hooks personalizados",
-        "Animações Básicas",
-        "Animando Componentes com Animated",
-        "Animando Layouts com LayoutAnimation",
-        "Gesture Handler",
-        "Trabalhando com PanResponder",
-        "Swipe para Remover Itens",
-        "Touchables no React Native",
-        "Criação de Modais",
-        "Acessando APIs com Fetch",
-        "Uso de Axios para Requisições HTTP",
-        "Consumindo APIs REST",
-        "Autenticação com JWT",
-        "Implementando Autenticação com Firebase",
-        "Autenticação via OAuth",
-        "Protegendo Rotas no React Native",
-        "Autenticação Biométrica",
-        "Persistência de Dados com AsyncStorage",
-        "Uso de SQLite no React Native",
-        "Trabalhando com Realm Database",
-        "Salvando Arquivos Localmente",
-        "Manipulando Arquivos e Uploads",
-        "Trabalhando com Mapas",
-        "Geolocalização no React Native",
-        "Integração com Google Maps",
-        "Renderizando Mapas com react-native-maps",
-        "Exibindo Pins e Marcadores no Mapa",
-        "Calculando Rotas com Google Maps API",
-        "Notificações Push com Firebase",
-        "Implementando Notificações Locais",
-        "Deep Linking no React Native",
-        "Acessando Câmera com expo-camera",
-        "Manipulação de Imagens",
-        "Leitura de Códigos QR",
-        "Usando a API de Sensores",
-        "Integração com Acelerômetro",
-        "Trabalhando com Giroscópio",
-        "Vibração do Dispositivo",
-        "Uso de Audio e Video no React Native",
-        "Gravação de Áudio",
-        "Reprodução de Vídeos",
-        "Background Tasks no React Native",
-        "Uso do Bluetooth",
-        "Comunicação com Dispositivos IoT",
-        "Integração com WebSocket",
-        "Criando um Chat com React Native",
-        "Uso de Context API para Chat",
-        "Integração com Firebase para Real-time",
-        "Construção de UIs Responsivas",
-        "Uso de Dimensions e Media Queries",
-        "Estilos para Diferentes Plataformas",
-        "Uso de Platform API",
-        "Detecção de Versão do Sistema Operacional",
-        "Integração com WebView",
-        "Carregando Páginas Web no App",
-        "Deep Linking para Web e App",
-        "Publicação de App na Google Play Store",
-        "Publicação de App na Apple App Store",
-        "Gerenciamento de Certificados iOS",
-        "Uso de Fastlane para Automação de Deploy",
-        "Testes Unitários com Jest",
-        "Testes de Integração no React Native",
-        "Testes End-to-End com Detox",
-        "Debugging no React Native",
-        "Uso de Flipper para Depuração",
-        "Performance no React Native",
-        "Otimização de Listas com FlatList",
-        "Memoization com React.memo",
-        "Uso do useCallback e useMemo",
-        "Lazy Loading de Componentes",
-        "Gestão de Memória no React Native",
-        "Uso de Hooks Avançados",
-        "Customização de Componentes Nativos",
-        "Integração com Módulos Nativos",
-        "Criando Módulos Nativos para Android",
-        "Criando Módulos Nativos para iOS",
-        "Uso de Expo no Desenvolvimento",
-        "Transição de Expo para React Native CLI",
-        "Configuração de Tipografia",
-        "Acessibilidade no React Native",
-        "Internacionalização e Localização",
-        "Tradução de Apps com react-i18next",
-        "Temas Dinâmicos no React Native",
-        "Modo Escuro e Modo Claro",
-        "Uso de Lottie para Animações",
-        "Integração com Serviços de Pagamento",
-        "Pagamentos com Stripe",
-        "Integração com PayPal",
-        "Criação de Assinaturas Recorrentes",
-        "Boas Práticas de Segurança",
-        "Criptografia de Dados Locais",
-        "Uso de SSL/TLS em Requisições",
-        "Monitoramento de Erros com Sentry",
-        "Logging de Erros no Servidor",
-        "Análises de Uso com Firebase Analytics",
-        "Uso de Google Analytics no React Native",
-        "Estratégias de Monetização",
-        "Publicidade no App com AdMob",
-        "Implementação de Recursos Offline",
-        "Sincronização de Dados Offline",
-        "Detecção de Conectividade",
-        "Uso de AppState para Gerenciar Estados",
-        "Otimização de Consumo de Bateria",
-        "Automação de Build e Testes",
-        "Uso de CI/CD com GitHub Actions",
-        "Automação de Build com Bitrise",
-        "Melhores Práticas de Versionamento",
-        "Manutenção de Apps em Produção",
-      ];
-
       const prompts = [
         `Escreve um prefácio de no mínimo 10000 caracteres de um livro sobre "${about}"`,
         `Escreve uma introdução de no mínimo 10000 caracteres de um livro sobre "${about}"`,
         `Escreve no mínimo 10000 caracteres no Capítulo ${chapterNumber} sobre ${
           reactNativeChapters[chapterNumber - 1]
-        }. Incluir exemplos concretos e citações de especialistas para apoiar as tuas afirmações.`,
+        } num livro que aborda "${about}". Incluir exemplos concretos e citações de especialistas para apoiar as tuas afirmações.`,
       ];
 
       return (
         prompts[chapterNumber] ||
         `Escreve no mínimo 10000 caracteres no Capítulo ${chapterNumber} sobre ${
           reactNativeChapters[chapterNumber - 1]
-        }. Incluir exemplos concretos e citações de especialistas para apoiar as tuas afirmações.`
+        } num livro que aborda "${about}". Incluir exemplos concretos e citações de especialistas para apoiar as tuas afirmações.`
         //`Rewrite code "${bookContentJson[previousChapter]}" using ${technology}. No further instructions. Just code ${chapters} improvements.`
       );
     },
@@ -232,7 +82,7 @@ const useProgress = (
   );
 
   const fetchSectionContent = useCallback(async (prompt: string) => {
-    for (let attempt = 0; attempt < 3; attempt++) {
+    for (let attempt = 0; attempt < 3000; attempt++) {
       try {
         await new Promise((resolve) => setTimeout(resolve, 5000)); // Simulate API call
 
@@ -252,7 +102,7 @@ const useProgress = (
 
   const generateSection = useCallback(
     async (chapterNumber: number) => {
-      const retryLimit = 5; // Define um limite de tentativas para evitar loop infinito
+      const retryLimit = 5000; // Define um limite de tentativas para evitar loop infinito
       let retries = 0;
       const promptReady = true;
 
@@ -260,24 +110,30 @@ const useProgress = (
         const prompt = buildPrompt(chapterNumber);
         const data = await fetchSectionContent(prompt);
 
-        if (!data) return;
+        if (!data) {
+          retries++;
+        } else {
+          if (chapterNumber === 0) setSumario(data.sectionContent);
+          setCusto((prev) => prev + data.costInDollars);
 
-        if (chapterNumber === 0) setSumario(data.sectionContent);
-        setCusto((prev) => prev + data.costInDollars);
+          // Verifica se o conteúdo não contém "desculpe" ou "desculpa"
+          if (
+            !data?.sectionContent?.includes?.("undefined") &&
+            !data?.sectionContent?.includes?.("Lamento") &&
+            !data?.sectionContent?.includes?.("Desculpe") &&
+            !data?.sectionContent?.includes?.("Desculpa") &&
+            !data?.sectionContent?.includes?.("lamento") &&
+            !data?.sectionContent?.includes?.("desculpe") &&
+            !data?.sectionContent?.includes?.("desculpa")
+          ) {
+            console.log("DEU CERTO");
+            return data.sectionContent;
+          }
+          console.log("NÃO DEU CERTO");
 
-        // Verifica se o conteúdo não contém "desculpe" ou "desculpa"
-        if (
-          !data?.sectionContent?.includes?.("desculpe") &&
-          !data?.sectionContent?.includes?.("desculpa")
-        ) {
-          console.log("DEU CERTO");
-          return data.sectionContent;
+          retries++; // Incrementa o contador de tentativas}
         }
-        console.log("NÃO DEU CERTO");
-
-        retries++; // Incrementa o contador de tentativas
       }
-
       console.warn("Número máximo de tentativas atingido");
       return null; // Retorna null caso o limite de tentativas seja atingido
     },
