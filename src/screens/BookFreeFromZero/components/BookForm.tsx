@@ -5,7 +5,7 @@ export const BookForm = ({
 }: any) => {
   return (
     <form onSubmit={handleSubmit} className="form">
-      <label>codigo</label>
+      <label>tema do livro (ex filosofia pra cachorros)</label>
       <textarea
         value={formValues.about}
         onChange={handleInputChange}
@@ -18,7 +18,7 @@ export const BookForm = ({
         name="chaptersArray"
       />
       <FormInput
-        label="Tecnologias utilizadas"
+        label="prompts adicionais que vc queira incluir"
         value={formValues.technology}
         onChange={handleInputChange}
         name="technology"
@@ -26,7 +26,7 @@ export const BookForm = ({
       />
 
       <FormInput
-        label="Número de capítulos"
+        label="Número de capítulos "
         type="number"
         value={formValues.chapters}
         onChange={handleInputChange}
