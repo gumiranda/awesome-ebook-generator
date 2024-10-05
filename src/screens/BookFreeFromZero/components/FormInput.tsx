@@ -6,6 +6,7 @@ export const FormInput = ({
   min,
   max,
   name,
+  required = true,
 }: any) => (
   <div className="input-container">
     <label>{label}</label>
@@ -13,7 +14,7 @@ export const FormInput = ({
       type={type}
       value={value}
       onChange={onChange}
-      required
+      required={required}
       min={min}
       max={max}
       name={name}

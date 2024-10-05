@@ -22,6 +22,7 @@ export const BookForm = ({
         value={formValues.technology}
         onChange={handleInputChange}
         name="technology"
+        required={false}
       />
 
       <FormInput

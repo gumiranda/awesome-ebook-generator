@@ -5,7 +5,7 @@ import { reactNativeChapters } from "../chapters";
 const useForm = (initialValues: {
   about: string;
   chapters: number;
-  technology: string;
+  technology?: string;
   chaptersArray: string;
 }) => {
   const [formValues, setFormValues] = useState(initialValues);
@@ -42,7 +42,7 @@ const fetchUrl = async (url: string | URL | Request, options = {}) => {
 interface FormValues {
   about: string;
   chapters: number;
-  technology: string;
+  technology?: string;
   chaptersArray: string;
 }
 
@@ -62,7 +62,7 @@ const useProgress = (
 
   const buildPrompt = useCallback(
     (chapterNumber: any) => {
-      const { about, technology, chapters, chaptersArray } = formValues;
+      const { about, technology, chaptersArray } = formValues;
       const chaptersArrayParsed = chaptersArray.split(",");
       const previousChapter = chapterNumber - 1;
       const prompts = [
@@ -146,7 +146,8 @@ const useProgress = (
     if (progress.currentChapter === -1 || !loading) return;
 
     const maxChapters = Number(formValues.chapters);
-    if (progress.currentChapter < maxChapters) {
+    const chaptersArray = formValues?.chaptersArray?.split?.(",");
+    if (progress.currentChapter <= chaptersArray.length) {
       try {
         const sectionContent = await generateSection(progress.currentChapter);
         if (sectionContent) {
