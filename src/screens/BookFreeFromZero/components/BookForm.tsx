@@ -11,6 +11,12 @@ export const BookForm = ({
         onChange={handleInputChange}
         name="about"
       />
+      <label>capitulos separados por virgula</label>
+      <textarea
+        value={formValues.chaptersArray}
+        onChange={handleInputChange}
+        name="chaptersArray"
+      />
       <FormInput
         label="Tecnologias utilizadas"
         value={formValues.technology}

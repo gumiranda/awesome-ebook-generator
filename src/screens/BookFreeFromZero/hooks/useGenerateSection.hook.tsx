@@ -6,6 +6,7 @@ const useForm = (initialValues: {
   about: string;
   chapters: number;
   technology: string;
+  chaptersArray: string;
 }) => {
   const [formValues, setFormValues] = useState(initialValues);
 
@@ -42,6 +43,7 @@ interface FormValues {
   about: string;
   chapters: number;
   technology: string;
+  chaptersArray: string;
 }
 
 const useProgress = (
@@ -60,18 +62,19 @@ const useProgress = (
 
   const buildPrompt = useCallback(
     (chapterNumber: any) => {
-      const { about, technology, chapters } = formValues;
+      const { about, technology, chapters, chaptersArray } = formValues;
+      const chaptersArrayParsed = chaptersArray.split(",");
       const previousChapter = chapterNumber - 1;
       const prompts = [
-        `Escreve um prefácio de 12000 caracteres de um livro sobre "${about}"`,
-        `Escreve uma introdução de 12000 caracteres de um livro sobre "${about}"`,
+        `Escreva um prefácio de 12000 caracteres de um livro sobre "${about}" ${technology}`,
+        `Escreva uma introdução de 12000 caracteres de um livro sobre "${about}" ${technology}`,
       ];
 
       return (
         prompts[chapterNumber] ||
-        `Escreve 12000 caracteres no Capítulo ${chapterNumber} sobre ${
-          reactNativeChapters[chapterNumber - 1]
-        } num livro que aborda "${about}". Incluir 5 exemplos práticos de cada tópico.`
+        `Escreva 12000 caracteres no Capítulo ${chapterNumber - 1} sobre ${
+          chaptersArrayParsed[chapterNumber - 1]
+        } num livro que aborda "${about}". Incluir exemplos em cada tópico. ${technology}`
         //`Rewrite code "${bookContentJson[previousChapter]}" using ${technology}. No further instructions. Just code ${chapters} improvements.`
       );
     },
@@ -189,6 +192,7 @@ export const useGenerateSection = () => {
     about: "",
     chapters: 5,
     technology: "",
+    chaptersArray: "",
   });
   const [revisedContent, setRevisedContent] = useState("");
   const [ativarReview, setAtivarReview] = useState(0);
