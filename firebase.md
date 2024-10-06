@@ -2,7 +2,7 @@
 
 Prefácio
 
-Bem-vindo ao mundo da criação de aplicativos móveis poderosos, eficientes e confiáveis usando o Firebase com React Native. Este livro é um guia abrangente e prático para desenvolvedores que desejam aproveitar ao máximo as capacidades do Firebase, a poderosa plataforma de desenvolvimento de aplicativos da Google, em conjunto com o React Native, um popular framework de desenvolvimento de aplicativos móveis baseado em JavaScript.
+Bem-vindo ao mundo da criação de apps poderosos usando o Firebase com React Native. Este livro é um guia abrangente e prático para desenvolvedores que desejam aproveitar ao máximo as capacidades do Firebase, a poderosa plataforma de desenvolvimento de aplicativos da Google, em conjunto com o React Native, um popular framework de desenvolvimento de aplicativos móveis baseado em JavaScript.
 
 Com a rápida evolução do mercado de aplicativos móveis e a crescente demanda por experiências de usuário de alta qualidade, é essencial estar atualizado com as mais recentes tecnologias e práticas de desenvolvimento. O Firebase se destaca como uma solução abrangente para desenvolvedores que buscam melhorar a escalabilidade, segurança e desempenho de seus aplicativos, enquanto o React Native oferece a flexibilidade e a familiaridade do desenvolvimento web para a criação de aplicativos móveis nativos.
 
