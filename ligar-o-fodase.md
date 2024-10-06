@@ -2,17 +2,17 @@
 
 Prefácio:
 
-Bem-vindo ao livro que pretende revolucionar a maneira como encaramos a vida e a carreira como programadores. "A Sutil Arte de Ligar o F*da-Se: Uma Estratégia Inusitada para Ser um Programador Mais Foda" é uma obra que desafia as convenções tradicionais e propõe uma nova abordagem para alcançar o sucesso e a felicidade no mundo da programação.
+Bem-vindo ao livro que pretende revolucionar o modo de encarar a vida e a carreira como devs. "A Sutil Arte de Ligar o F*da-Se: Uma Estratégia Inusitada para Ser um Programador Mais Foda" é uma obra que desafia o status quo e propõe uma abordagem para ser um dev foda no capitalismo de vigilância que vivemos.
 
-O título pode parecer chocante à primeira vista, mas a proposta deste livro vai muito além da simples linguagem provocativa. Aqui, não se trata de incentivar a indiferença ou a falta de comprometimento, mas sim de promover a busca por uma mentalidade mais autêntica e livre das amarras que muitas vezes nos impedem de alcançar nosso potencial máximo.
+O título parece zuado à primeira vista, mas a proposta deste livro vai além de provocar. Aqui, não se trata de incentivar a indiferença ou a falta de noção, mas promover a busca por uma mentalidade mais autêntica e livre das amarras da sociedade.
 
-Ao longo destas páginas, você encontrará reflexões, dicas e estratégias que visam estimular o seu desenvolvimento pessoal e profissional, capacitando-o a se tornar um programador mais confiante, criativo e realizado. A ideia central é simples: ao aprender a selecionar com sabedoria as batalhas que realmente valem a pena lutar, você será capaz de concentrar sua energia e foco nas áreas que verdadeiramente importam, maximizando assim suas chances de sucesso e satisfação.
+Ao longo destas páginas, você encontrará reflexões, dicas e estratégias que visam estimular seu leão interior, capacitando-o a se tornar um dev mais confiante e foda. A ideia é simples: selecione as batalhas que realmente valem a pena lutar, e você será capaz de concentrar sua energia e foco no que realmente vale, maximizando seu nível de satisfação total.
 
-Partindo de uma perspectiva realista e sem rodeios, este livro aborda temas como a importância do autoconhecimento, a gestão eficaz do tempo, o enfrentamento dos desafios profissionais e a manutenção de uma mentalidade positiva diante das adversidades. Além disso, apresenta técnicas práticas para lidar com a pressão, a competição e as expectativas externas, sem perder de vista a sua essência e os seus valores mais profundos.
+Partindo de uma perspectiva realista e sem rodeios, este livro aborda temas como autoconhecimento, gestão eficaz do tempo, enfrentamento dos otários no trampo e a manutenção de uma mentalidade implacável diante das adversidades. Além disso, apresenta técnicas pra lidar com a pressão, a competição e as expectativas dos outros, sem perder de vista a sua essência e suas vontades.
 
-Se você está cansado das abordagens convencionais e está em busca de uma dose extra de inspiração e motivação para alavancar a sua carreira como programador, este livro é para você. Aqui, você encontrará não apenas um guia prático para melhorar suas habilidades técnicas, mas também um convite para mergulhar em si mesmo, descobrir o que realmente importa para você e assumir o controle do seu próprio destino.
+Se você tá cansado das abordagens convencionais e está em busca de uma dose extra de inspiração e motivação pra alavancar a sua carreira como dev, este livro é para você. Aqui, você encontra um convite pra parar de ser trouxa, descobrir o que realmente importa e assumir o controle do seu próprio destino.
 
-Portanto, prepare-se para desvendar os segredos da sutil arte de ligar o f*da-se e descobrir todo o potencial que habita em você. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que certamente transformará a sua maneira de encarar a vida e a programação. Está pronto para dar esse passo rumo ao seu melhor eu como programador? Então, vamos juntos embarcar nessa jornada e desbravar novos horizontes de possibilidades. O sucesso espera por você do outro lado da sua coragem e autenticidade.
+Portanto, prepare-se para desvendar essa porra e descobrir todo o potencial que habita em você. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que transformará a sua maneira de encarar a vida e a programação. Está pronto para dar esse passo rumo ao seu melhor eu como programador? Então, vamos juntos embarcar nessa jornada e desbravar novos horizontes de possibilidades. O sucesso espera por você do outro lado da sua coragem e autenticidade.
 
 Prefácio: 
 
