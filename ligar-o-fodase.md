@@ -4,21 +4,17 @@ Prefácio:
 
 Bem-vindo ao livro que pretende revolucionar o modo de encarar a vida e a carreira como devs. "A Sutil Arte de Ligar o F*da-Se: Uma Estratégia Inusitada para Ser um Programador Mais Foda" é uma obra que desafia o status quo e propõe uma abordagem para ser um dev foda no capitalismo de vigilância que vivemos.
 
-O título parece zuado à primeira vista, mas a proposta deste livro vai além de provocar. Aqui, não se trata de incentivar a indiferença ou a falta de noção, mas promover a busca por uma mentalidade mais autêntica e livre das amarras da sociedade.
+O título parece zuado à primeira vista, mas a proposta deste livro vai além de provocar. Aqui, não se trata de incentivar a indiferença ou a falta de noção, mas promover uma mentalidade mais autêntica e livre das amarras da sociedade.
 
-Ao longo destas páginas, você encontrará reflexões, dicas e estratégias que visam estimular seu leão interior, capacitando-o a se tornar um dev mais confiante e foda. A ideia é simples: selecione as batalhas que realmente valem a pena lutar, e você será capaz de concentrar sua energia e foco no que realmente vale, maximizando seu nível de satisfação total.
+Ao longo destas páginas, você encontrará reflexões que visam estimular seu leão interior, capacitando-o a se tornar um dev mais confiante e foda. A ideia é simples: selecione as batalhas que realmente valem a pena lutar, e você será capaz de concentrar sua energia e foco no que realmente vale, maximizando seu nível de satisfação total.
 
 Partindo de uma perspectiva realista e sem rodeios, este livro aborda temas como autoconhecimento, gestão eficaz do tempo, enfrentamento dos otários no trampo e a manutenção de uma mentalidade implacável diante das adversidades. Além disso, apresenta técnicas pra lidar com a pressão, a competição e as expectativas dos outros, sem perder de vista a sua essência e suas vontades.
 
 Se você tá cansado das abordagens convencionais e está em busca de uma dose extra de inspiração e motivação pra alavancar a sua carreira como dev, este livro é para você. Aqui, você encontra um convite pra parar de ser trouxa, descobrir o que realmente importa e assumir o controle do seu próprio destino.
 
-Portanto, prepare-se para desvendar essa porra e descobrir todo o potencial que habita em você. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que transformará a sua maneira de encarar a vida e a programação. Está pronto para dar esse passo rumo ao seu melhor eu como programador? Então, vamos juntos embarcar nessa jornada e desbravar novos horizontes de possibilidades. O sucesso espera por você do outro lado da sua coragem e autenticidade.
+Portanto, prepare-se para desvendar essa porra e descobrir todo o potencial que habita em você. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que transformará a sua maneira de encarar a vida e o trabalho. Tá pronto para dar esse passo e parar de ser otário? Então, vamos juntos embarcar nessa jornada e desbravar essa parada. O sucesso é só uma palavra inventada, o que importa é ter coragem e autenticidade.
 
-Prefácio: 
-
-Bem-vindo ao incrível mundo da programação, onde linhas de código se entrelaçam em um ballet digital, criando universos inteiros dentro de uma tela em branco. Este livro, intitulado "A Sutil Arte de Ligar o F*da-Se: Uma Estratégia Inusitada para Ser um Programador Mais Foda", é um convite para aqueles que desejam desvendar os mistérios da programação, mas também para aqueles que buscam uma abordagem mais pragmática e descomplicada para conquistar o sucesso nesse campo.
-
-A jornada de um programador é repleta de desafios, frustrações e momentos de pura genialidade. Por trás de cada aplicativo, site ou sistema que utilizamos diariamente, há um profissional dedicado, que muitas vezes se vê diante de problemas complexos e prazos apertados. Nesse cenário exigente, é fácil se sentir sobrecarregado e desmotivado, mas é justamente nestes momentos que a arte de ligar o f*da-se se torna uma ferramenta poderosa.
+A jornada de um dev é cheia de cagadas, frustrações e momentos de pura genialidade. Por trás de cada app, site ou sistema que fazemos, há um profissional dedicado, que muitas vezes se vê diante de problemas complexos e prazos tirados do rabo. Nesse cenário exigente, é fácil se sentir sobrecarregado e desmotivado, mas é nestes momentos que a arte de ligar o f*da-se se torna uma ferramenta poderosa.
 
 Este livro não é apenas um guia técnico sobre linguagens de programação ou boas práticas de desenvolvimento de software. Ele vai além, explorando a mente do programador e os aspectos psicológicos que influenciam seu desempenho e bem-estar. Afinal, não basta dominar a sintaxe de uma linguagem de programação ou conhecer os algoritmos mais eficientes se a mente do programador estiver sobrecarregada de dúvidas e inseguranças.
 
