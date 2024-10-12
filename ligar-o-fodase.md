@@ -2,9 +2,9 @@
 
 Prefácio:
 
-Bem-vindo ao livro que pretende revolucionar o modo de encarar a vida e a carreira como devs. "A Sutil Arte de Ligar o F*da-Se: Uma Estratégia Inusitada para Ser um Programador Mais Foda" é uma obra que desafia o status quo e propõe uma abordagem para ser um dev foda no capitalismo de vigilância que vivemos.
+Bem-vindo ao livro que vai revolucionar o modo de encarar a vida e a carreira como devs. "A hora de Tacar o F*da-Se: A Estratégia para Ser um Programador Mais Foda" é uma obra que desafia o status quo e propõe uma abordagem para ser um dev foda no capitalismo de vigilância que vivemos.
 
-O título parece zuado à primeira vista, mas a proposta deste livro vai além de provocar. Aqui, não se trata de incentivar a indiferença ou a falta de noção, mas promover uma mentalidade mais autêntica e livre das amarras da sociedade.
+O título parece zuado, mas a ideia do livro vai além de provocar. Aqui, não vamos incentivar a indiferença ou a falta de noção, mas promover uma mentalidade mais autêntica e livre das amarras da sociedade.
 
 Ao longo destas páginas, você encontrará reflexões que visam estimular seu leão interior, capacitando-o a se tornar um dev mais confiante e foda. A ideia é simples: selecione as batalhas que realmente valem a pena lutar, e você será capaz de concentrar sua energia e foco no que realmente vale, maximizando seu nível de satisfação total.
 
@@ -12,21 +12,21 @@ Partindo de uma perspectiva realista e sem rodeios, este livro aborda temas como
 
 Se você tá cansado das abordagens convencionais e está em busca de uma dose extra de inspiração e motivação pra alavancar a sua carreira como dev, este livro é para você. Aqui, você encontra um convite pra parar de ser trouxa, descobrir o que realmente importa e assumir o controle do seu próprio destino.
 
-Portanto, prepare-se para desvendar essa porra e descobrir todo o potencial que habita em você. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que transformará a sua maneira de encarar a vida e o trabalho. Tá pronto para dar esse passo e parar de ser otário? Então, vamos juntos embarcar nessa jornada e desbravar essa parada. O sucesso é só uma palavra inventada, o que importa é ter coragem e autenticidade.
+Portanto, prepare-se para desvendar essa porra e descobrir todo o potencial que habita em você. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que vai mudar a sua forma de encarar a vida e o trabalho. Bora dar esse passo e parar de ser otário? O sucesso é só uma palavra inventada, o que importa é ter coragem e autenticidade.
 
-A jornada de um dev é cheia de cagadas, frustrações e momentos de pura genialidade. Por trás de cada app, site ou sistema que fazemos, há um profissional dedicado, que muitas vezes se vê diante de problemas complexos e prazos tirados do rabo. Nesse cenário exigente, é fácil se sentir sobrecarregado e desmotivado, mas é nestes momentos que a arte de ligar o f*da-se se torna uma ferramenta poderosa.
+A jornada de um dev é cheia de cagadas, frustrações e momentos de pura genialidade. Por trás de cada app, site ou sistema que fazemos, há um profissional fudido, que muitas vezes se vê diante de problemas complexos e prazos tirados do rabo. Nesse cenário de merda, é fácil se sentir sobrecarregado e desmotivado, mas é nestes momentos que a arte de tacar o f*da-se se torna uma ferramenta poderosa.
 
-Este livro não é apenas um guia técnico sobre linguagens de programação ou boas práticas de desenvolvimento de software. Ele vai além, explorando a mente do programador e os aspectos psicológicos que influenciam seu desempenho e bem-estar. Afinal, não basta dominar a sintaxe de uma linguagem de programação ou conhecer os algoritmos mais eficientes se a mente do programador estiver sobrecarregada de dúvidas e inseguranças.
+Afinal, não basta dominar a sintaxe de uma linguagem de programação ou conhecer a parte técnica se a psicológica estiver uma merda.
 
-Ao longo das próximas páginas, você será convidado a repensar a forma como encara os desafios da programação, adotando uma postura mais leve, descomplicada e autoconfiante. A sutil arte de ligar o f*da-se não se trata de ignorar os problemas ou se eximir de responsabilidades, mas sim de aprender a escolher onde direcionar sua energia, focando no que realmente importa e deixando de lado aquilo que apenas rouba sua paz e produtividade.
+Tá na hora de adotar uma postura mais leve, descomplicada e autoconfiante. A arte de tacar o f*da-se não se trata de ignorar os problemas ou se omitir da bronca, mas de aprender a escolher onde direcionar sua energia, focando no que realmente importa e deixando de lado aquilo que apenas rouba sua paz.
 
-Se você está cansado de sentir-se frustrado com bugs impossíveis de serem resolvidos, pressionado por prazos insanos ou inseguro quanto às suas habilidades como programador, este livro é para você. Aqui, você encontrará estratégias inusitadas, exemplos práticos e reflexões inspiradoras que irão transformar sua maneira de encarar a programação e, consequentemente, sua vida profissional e pessoal.
+Se você está cansado de sentir-se frustrado com bugs impossíveis de serem resolvidos, pressionado por prazos ridículos ou com síndrome do impostor como programador, este livro é para você. Aqui, você encontrará estratégias, exemplos e reflexões que irão transformar sua maneira de encarar a vida.
 
-Não se engane: a sutil arte de ligar o f*da-se não é um convite para a preguiça ou para a mediocridade. Muito pelo contrário, é um convite para a excelência, a autoconfiança e a autenticidade. É sobre sair da zona de conforto, ousar ser diferente e abraçar os desafios com coragem e determinação. É sobre se tornar, em todos os sentidos, um programador mais foda.
+Não se engane: a hora de tacar o f*da-se não é um convite para a preguiça ou para a mediocridade. Muito pelo contrário, é um convite para a excelência, a autoconfiança e a autenticidade. É sobre sair da zona de conforto, ousar ser diferente e abraçar os desafios com coragem e determinação. É sobre se tornar, em todos os sentidos, um programador mais foda.
 
-Então, caro leitor, prepare-se para embarcar nessa jornada extraordinária de autoconhecimento, superação e aprendizado. Este livro é um convite para você desafiar as convenções, quebrar as barreiras do seu próprio potencial e se tornar o programador que sempre sonhou ser. Está na hora de ligar o f*da-se e assumir o controle da sua vida profissional. Vamos juntos nessa jornada rumo à excelência.
+Então chega de conversa mole, bora pro livro.
 
-Título: A Sutil Arte de Ligar o F*da-Se: Uma Estratégia Inusitada para Ser um Programador Mais Foda
+Título: A Hora de Tacar o F*da-Se: A Estratégia para Ser um Programador Mais Foda
 
 Introdução:
 
