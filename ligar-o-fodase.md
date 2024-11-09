@@ -2,17 +2,17 @@
 
 Prefácio:
 
-Bem-vindo ao livro que vai revolucionar o modo de encarar a vida e a carreira como devs. "A hora de Tacar o F*da-Se: A Estratégia para Ser um Programador Mais Foda" é uma obra que desafia o status quo e propõe uma abordagem para ser um dev foda no capitalismo de vigilância que vivemos.
+Bem-vindo ao livro que vai mudar o modo de encarar a vida como devs. "A hora de Tacar o F*da-Se: A Estratégia para Ser um dev Foda" é uma obra que desafia o status quo e propõe uma abordagem para ser um dev foda no capitalismo de vigilância que vivemos.
 
 O título parece zuado, mas a ideia do livro vai além de provocar. Aqui, não vamos incentivar a indiferença ou a falta de noção, mas promover uma mentalidade mais autêntica e livre das amarras da sociedade.
 
-Ao longo destas páginas, você encontrará reflexões que visam estimular seu leão interior, capacitando-o a se tornar um dev mais confiante e foda. A ideia é simples: selecione as batalhas que realmente valem a pena lutar, e você será capaz de concentrar sua energia e foco no que realmente vale, maximizando seu nível de satisfação total.
+Ao longo do livro, você vai refletir visando despertar da matrix, tornando-se um dev mais confiante e foda. É simples: selecione as batalhas que realmente valem a pena lutar, e você será capaz de concentrar sua energia e foco no que realmente interessa, maximizando seu nível de compromisso com o corre.
 
-Partindo de uma perspectiva realista e sem rodeios, este livro aborda temas como autoconhecimento, gestão eficaz do tempo, enfrentamento dos otários no trampo e a manutenção de uma mentalidade implacável diante das adversidades. Além disso, apresenta técnicas pra lidar com a pressão, a competição e as expectativas dos outros, sem perder de vista a sua essência e suas vontades.
+Partindo de uma perspectiva realista e sem rodeios, este livro aborda temas como autoconhecimento, psicologia barata, enfrentamento de otários no trampo e a manutenção de uma mentalidade implacável diante das adversidades. Além disso, apresenta técnicas pra lidar com a pressão, a competição e as expectativas dos outros, sem perder de vista a sua essência e suas vontades.
 
-Se você tá cansado das abordagens convencionais e está em busca de uma dose extra de inspiração e motivação pra alavancar a sua carreira como dev, este livro é para você. Aqui, você encontra um convite pra parar de ser trouxa, descobrir o que realmente importa e assumir o controle do seu próprio destino.
+Se você tá cansado de abordagens convencionais e está na busca de uma dose extra de inspiração, este livro é para você. Aqui, você encontra um convite pra parar de ser trouxa, descobrir o que realmente importa e assumir o controle da própria vida.
 
-Portanto, prepare-se para desvendar essa porra e descobrir todo o potencial que habita em você. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que vai mudar a sua forma de encarar a vida e o trabalho. Bora dar esse passo e parar de ser otário? O sucesso é só uma palavra inventada, o que importa é ter coragem e autenticidade.
+Prepare-se para desvendar essa parada e descobrir todo o potencial que você tem. Este livro é um convite para uma jornada de autodescoberta, crescimento e realização que vai mudar a sua forma de encarar a vida e o trabalho. Bora dar esse passo e parar de ser otário? O sucesso é só uma palavra inventada, o que importa é ter coragem e autenticidade.
 
 A jornada de um dev é cheia de cagadas, frustrações e momentos de pura genialidade. Por trás de cada app, site ou sistema que fazemos, há um profissional fudido, que muitas vezes se vê diante de problemas complexos e prazos tirados do rabo. Nesse cenário de merda, é fácil se sentir sobrecarregado e desmotivado, mas é nestes momentos que a arte de tacar o f*da-se se torna uma ferramenta poderosa.
 
